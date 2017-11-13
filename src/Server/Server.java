@@ -13,8 +13,10 @@ public class Server {
     public static void main(String[] args) {
         try {
             //Implementation implementation = new Implementation();
+            //FER TOTES LES IMPLEMENTACIONS QUE HI HAGI AQUÍ
             startRegistry();
             //Naming.rebind(RMI_NAME, implementation);
+            //FER UN REBIND DE TOTES LES IMPLEMENTACIONS
             System.out.println("RMI_HelloWorld.Server Bound");
         } catch (Exception e) {
             e.printStackTrace();
