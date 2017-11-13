@@ -33,7 +33,7 @@ public interface MyTubeInterface extends Remote {
      * @return list of matching Contents
      * @throws RemoteException if can't make the petition to the Server
      */
-    public List<ContentInterface> getContentsFromKeyword(String keyword)
+    public List<ContentInterface> searchFromKeyword(String keyword)
             throws RemoteException;
 
     /**
@@ -74,4 +74,5 @@ public interface MyTubeInterface extends Remote {
      */
     /*public void sendAgent(MobileAgent agent) throws RemoteException;*/
 
+    void exit();
 }

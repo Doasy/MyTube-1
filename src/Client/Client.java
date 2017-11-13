@@ -1,20 +1,21 @@
 package Client;
 
+import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.rmi.Naming;
-import java.rmi.Naming.*;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 
-public class Client {
+public class Client implements ClientInterface{
     private int port;
     private String ip;
+    private String rmi_url;
     private String rmi_name;
     private Registry registry;
     private MyTubeInterface stub;
@@ -22,7 +23,8 @@ public class Client {
     Client(String ip, int port){
         this.port = port;
         this.ip = ip;
-        rmi_name = "rmi://" + ip + ":" + port + "/MyTube";
+        this.rmi_name = "MyTube";
+        rmi_url = "rmi://" + ip + ":" + port + "/" + this.rmi_name;
     }
 
 
@@ -50,7 +52,6 @@ public class Client {
             }
             registry = LocateRegistry.getRegistry(ip, port);
             stub = (MyTubeInterface) registry.lookup(rmi_name);
-            //String registryURL = "rmi://"  + ip  + ":" +  port+"/"  + registry;
             //callbackObject = new MyTubeCallbackImpl();
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
@@ -62,7 +63,7 @@ public class Client {
 
 
     public static void main(String args[]) {
-        String option;
+        int option;
         try {
             if (args.length < 2) {
                 System.err.println("Parameters: <ip> <port>");
@@ -71,12 +72,58 @@ public class Client {
 
             final Client client = new Client(args[0], Integer.parseInt(args[1]));
             client.connectToTheServer();
-            //TODO: POSAR TOTES LES REMOTES INTERFACES QUE FEM SERVIR
             optionsMenu();
-            option = readInput();
+            option = Integer.parseInt(readInput());
+            switch (option){
+                case 0:
+                    client.exit();
+                case 1:
+                    //TODO
+                    client.upload(null);
+                    break;
+                case 2:
+                    client.download();
+                    break;
+                case 3:
+                    client.listAll();
+                    break;
+                case 4:
+                    //TODO
+                    client.search(null);
+                    break;
+
+            }
         }
         catch (Exception e) {
             System.out.println("Exception in Client: "+  e);
         }
+    }
+
+
+    @Override
+    public List<ContentInterface> search(String keyWord) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public List<ContentInterface> listAll() {
+        return null;
+    }
+
+    @Override
+    public ContentInterface download() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public String upload(ContentInterface content) {
+        return null;
+    }
+
+    @Override
+    public void exit() {
+        //TODO
     }
 }
