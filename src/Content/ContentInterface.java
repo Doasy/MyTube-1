@@ -4,10 +4,10 @@ import java.io.File;
 
 public interface ContentInterface {
 
-    public File getFile();
+    File getFile();
 
-    public String getTitle();
+    String getTitle();
 
-    public String getDescription();
+    String getDescription();
 
 }
