@@ -1,4 +1,7 @@
 package Content;
 
-public class ContentInterface {
+import java.io.File;
+
+public interface ContentInterface {
+
 }
