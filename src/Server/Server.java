@@ -7,7 +7,8 @@ import java.rmi.registry.Registry;
 
 public class Server {
     private static final int PORT = 40000;
-    private static final String RMI_NAME = "rmi://localhost:" + PORT + "/hello";
+    private static final String IP = "POSAR IP AQUI";
+    private static final String RMI_NAME = "rmi://"+ IP + ":" + PORT + "/MyTube";
 
     public static void main(String[] args) {
         try {

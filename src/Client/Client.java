@@ -6,7 +6,8 @@ import java.io.InputStreamReader;
 import java.rmi.Naming.*;
 public class Client {
     private static final int PORT = 40000;
-    private static final String RMI_NAME = "rmi://localhost:" + PORT + "/MyTube";
+    private static final String IP = "POSAR IP AQUI";
+    private static final String RMI_NAME = "rmi://"+ IP + ":" + PORT + "/MyTube";
 
     public static void main(String args[]) {
         String option;
