@@ -28,10 +28,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         return null;
     }
 
+
     @Override
     public List<ContentInterface> searchFromKeyword(String keyword) throws RemoteException {
         //TODO
-        return null;
+         return null;
     }
 
     @Override
@@ -49,18 +50,30 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
 
     @Override
-    public ContentInterface uploadContent(String title, String description, byte[] fileData) throws RemoteException {
+    public String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
+        //TODO HASH
+        String hash="";
+        String response = "";
+        BufferedOutputStream output;
+        File file = new File("./server/" + hash +  title);
         try {
-            File file = new File("path where we want to save the file" + title);
-            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file.getName()));
+            output = new BufferedOutputStream(new FileOutputStream(file.getName()));
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
-        }catch(Exception e){
+            response = "Successful upload!";
+        }catch(FileNotFoundException e){
             System.err.println("FileServer Exception " + e.getMessage());
+            response = "there has been a problem with the file :S";
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("FileServer Exception " + e.getMessage());
+            response = "there has been a IO problem :S";
             e.printStackTrace();
         }
-        return null;
+        return response;
+
+
     }
 
     @Override
