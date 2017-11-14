@@ -143,6 +143,7 @@ public class Client implements ClientInterface{
 
             return(null);
         }
+        return "message";
     }
 
     @Override
