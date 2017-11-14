@@ -35,6 +35,7 @@ public class XMLCreator {
         }
         File file = new File(filename);
         this.document = dBuilder.parse(file);
+        classElement = document.getDocumentElement();
     }
 
     public void addElement(String id, String ContentTitle, String ContentDescription, String uploaderName){
