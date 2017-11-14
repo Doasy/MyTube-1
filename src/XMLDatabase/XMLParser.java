@@ -54,7 +54,7 @@ public class XMLParser {
         return listOfTitles;
     }
 
-    public int XMLFindIdBy(String title){
+    public int XMLFindIdByTitle(String title){
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();
 
