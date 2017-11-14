@@ -45,7 +45,7 @@ public interface MyTubeInterface extends Remote {
      * @return the added Content
      * @throws RemoteException if can't make the petition to the Server
      */
-    public ContentInterface uploadContent(String title, String description)
+    public ContentInterface uploadContent(String title, String description, byte[] fileData)
             throws RemoteException;
 
     /**
@@ -67,12 +67,12 @@ public interface MyTubeInterface extends Remote {
             throws RemoteException;*/
 
     /**
-     * Send the MobileAgent
      *
-     * @param agent MobileAgent to be sended
-     * @throws RemoteException if can't make the petition to the Server
+     * @param contentName
+     * @return
+     * @throws RemoteException
      */
-    /*public void sendAgent(MobileAgent agent) throws RemoteException;*/
+    byte[] downloadContent(String contentName) throws RemoteException;
 
     void exit();
 }
