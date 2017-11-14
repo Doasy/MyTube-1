@@ -24,7 +24,7 @@ public interface MyTubeInterface extends Remote {
     public List<ContentInterface> searchFromKeyword(String keyword)
             throws RemoteException;
 
-    public List<ContentInterface> searchAll() throws RemoteException;
+    public List<String> searchAll() throws RemoteException;
 
     public ContentInterface uploadContent(String title, String description, byte[] fileData)
             throws RemoteException;

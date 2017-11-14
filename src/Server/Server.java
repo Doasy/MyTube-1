@@ -5,7 +5,6 @@ import InterfaceImplement.MyTubeImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -37,28 +36,18 @@ public class Server {
         createDirectory();
     }
 
+    /**
+     * ./server01 will be our system files
+     * @throws IOException
+     */
     private void createDirectory() throws IOException {
         Process p = Runtime.getRuntime().exec("mkdir ./server01");
 
-        p = Runtime.getRuntime().exec("ls");
+        //p = Runtime.getRuntime().exec("ls");
 
-        readSystemCall(p);
+        //readSystemCall(p);
     }
 
-
-    private void readSystemCall(Process p) throws IOException {
-        String s;BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(p.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(p.getErrorStream()));
-
-        // read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
-        while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
-        }
-    }
 
     public static void main(String args[]) throws IOException {
 
