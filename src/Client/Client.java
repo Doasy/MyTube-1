@@ -143,7 +143,9 @@ public class Client implements ClientInterface{
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            ContentInterface contentInterface = stub.uploadContent("title", "description", buffer);
+            String uploadResponse = stub.uploadContent("title", "description", buffer);
+
+            System.out.println(uploadResponse);
 
         }catch(Exception e){
             System.out.println("FileImpl " + e.getMessage());
