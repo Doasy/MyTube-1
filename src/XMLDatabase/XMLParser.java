@@ -33,4 +33,21 @@ public class XMLParser {
         return listOfTitles;
     }
 
+    public List<String> XMLFindByKeyWord(String keyWord){
+        List<Element> contentList = classElement.getChildren();
+        List<String> listOfTitles = new ArrayList<>();
+        keyWord = keyWord.toLowerCase();
+
+        for (Element content : contentList) {
+            String title = content.getChild("Title").getText().toLowerCase();
+            String description = content.getChild("Description").getText().toLowerCase();
+
+            if(title.contains(keyWord) || description.contains(keyWord)){
+                listOfTitles.add(content.getChild("Title").getText());
+            }
+        }
+        return listOfTitles;
+    }
+
+
 }
