@@ -17,25 +17,22 @@ import java.io.File;
 import java.io.IOException;
 
 public class XMLCreator {
-    private String filename = "Contents.xml";
+    private String filename = "server01/Contents.xml";
     private DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     private DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     private Document document;
     private Element classElement;
 
-    public XMLCreator() throws ParserConfigurationException {
-        this.document = dBuilder.newDocument();
-        this.classElement = document.createElement("Contents");
-        document.appendChild(classElement);
-    }
-
-    public XMLCreator(String filename) throws ParserConfigurationException, IOException, SAXException {
-        if(!filename.equals(this.filename)) {
-            this.filename = filename;
-        }
+    public XMLCreator() throws ParserConfigurationException, IOException, SAXException {
         File file = new File(filename);
-        this.document = dBuilder.parse(file);
-        classElement = document.getDocumentElement();
+        if(file.exists()){
+            this.document = dBuilder.parse(file);
+            classElement = document.getDocumentElement();
+        }else {
+            this.document = dBuilder.newDocument();
+            this.classElement = document.createElement("Contents");
+            document.appendChild(classElement);
+        }
     }
 
     public void addElement(String id, String ContentTitle, String ContentDescription, String uploaderName){
