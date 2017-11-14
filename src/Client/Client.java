@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client implements ClientInterface{
@@ -106,8 +107,15 @@ public class Client implements ClientInterface{
 
     @Override
     public List<ContentInterface> listAll() {
-        return null;
+        List<ContentInterface> contents = new ArrayList<>();
+        try {
+            contents = stub.searchAll();
+        } catch (RemoteException e) {
+            System.err.println("Problem searching files");
+        }
+        return contents;
     }
+
 
     @Override
     public ContentInterface download(String contentName) {

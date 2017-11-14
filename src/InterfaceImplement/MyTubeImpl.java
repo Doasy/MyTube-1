@@ -32,6 +32,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
+    public List<ContentInterface> searchAll() throws RemoteException {
+        //TODO
+        return null;
+    }
+
+    @Override
     public ContentInterface uploadContent(String title, String description, byte[] fileData) throws RemoteException {
         try {
             File file = new File("path where we want to save the file" + title);
@@ -43,6 +49,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public ContentInterface downloadContent() throws RemoteException {
         return null;
     }
 

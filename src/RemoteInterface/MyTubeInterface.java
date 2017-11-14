@@ -17,35 +17,19 @@ public interface MyTubeInterface extends Remote {
      */
     public ContentInterface getContentFromKey(int key) throws RemoteException;
 
-    /**
-     * Get a Content from matching title or null if not exist
-     *
-     * @param title title of the Content
-     * @return Content matching title
-     * @throws RemoteException if can't make the petition to the Server
-     */
+
     public ContentInterface getContentFromTitle(String title) throws RemoteException;
 
-    /**
-     * Get all Contents with a title that matches a keyword
-     *
-     * @param keyword keyword used to search Contents
-     * @return list of matching Contents
-     * @throws RemoteException if can't make the petition to the Server
-     */
+
     public List<ContentInterface> searchFromKeyword(String keyword)
             throws RemoteException;
 
-    /**
-     * Upload a new content to the Server and returns a Content object or null
-     * if the Content can't be added
-     *
-     * @param title title of the Content
-     * @param description description of the Content
-     * @return the added Content
-     * @throws RemoteException if can't make the petition to the Server
-     */
+    public List<ContentInterface> searchAll() throws RemoteException;
+
     public ContentInterface uploadContent(String title, String description, byte[] fileData)
+            throws RemoteException;
+
+    public ContentInterface downloadContent()
             throws RemoteException;
 
     /**
@@ -66,12 +50,7 @@ public interface MyTubeInterface extends Remote {
    /* public void removeCallback(MyTubeCallback callbackObject)
             throws RemoteException;*/
 
-    /**
-     *
-     * @param contentName
-     * @return
-     * @throws RemoteException
-     */
+
     byte[] downloadContent(String contentName) throws RemoteException;
 
     void exit() throws RemoteException;
