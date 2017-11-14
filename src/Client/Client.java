@@ -100,9 +100,14 @@ public class Client implements ClientInterface{
 
 
     @Override
-    public List<ContentInterface> search(String keyWord) {
-        //TODO
-        return null;
+    public List<String> search(String keyWord) {
+        List<String> contents = new ArrayList<>();
+        try {
+            contents = stub.searchFromKeyword(keyWord);
+        } catch (RemoteException e) {
+            System.err.println("Problem searching files");
+        }
+        return contents;
     }
 
     @Override
@@ -135,6 +140,7 @@ public class Client implements ClientInterface{
 
     @Override
     public String upload(ContentInterface content) {
+        String uploadResponse = "";
         try{
             File file = new File(content.getTitle());
             byte buffer[] = new byte[(int)file.length()];
@@ -143,7 +149,7 @@ public class Client implements ClientInterface{
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            String uploadResponse = stub.uploadContent("title", "description", buffer);
+            uploadResponse = stub.uploadContent("title", "description", buffer);
 
             System.out.println(uploadResponse);
 
@@ -151,9 +157,9 @@ public class Client implements ClientInterface{
             System.out.println("FileImpl " + e.getMessage());
             e.printStackTrace();
 
-            return(null);
+            uploadResponse = "Something was wrong :S";
         }
-        return "message";
+        return uploadResponse;
     }
 
     @Override

@@ -2,7 +2,10 @@ package InterfaceImplement;
 
 import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
+import XMLDatabase.XMLCreator;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,9 +14,11 @@ import java.util.List;
 
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     String systemFile= "./server01";
+    static XMLCreator xmlcreator ;
 
-    public MyTubeImpl() throws RemoteException {
+    public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
+        xmlcreator = new XMLCreator();
     }
 
     @Override
@@ -30,7 +35,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
 
     @Override
-    public List<ContentInterface> searchFromKeyword(String keyword) throws RemoteException {
+    public List<String> searchFromKeyword(String keyword) throws RemoteException {
         //TODO
          return null;
     }
@@ -71,6 +76,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             response = "there has been a IO problem :S";
             e.printStackTrace();
         }
+        xmlcreator.addElement(hash, title, description, "patata");
         return response;
 
 
