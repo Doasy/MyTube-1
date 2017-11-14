@@ -74,5 +74,5 @@ public interface MyTubeInterface extends Remote {
      */
     /*public void sendAgent(MobileAgent agent) throws RemoteException;*/
 
-    void exit();
+    void exit() throws RemoteException;
 }

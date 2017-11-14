@@ -37,7 +37,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public void exit(){
+    public void exit() throws RemoteException{
         //TODO
     }
 }

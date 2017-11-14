@@ -2,6 +2,9 @@ package Server;
 
 import InterfaceImplement.MyTubeImpl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -24,24 +27,48 @@ public class Server {
      * @param port port where the server listens for client petitions
      * @param registryName name of the registered service on RMI Registry
      */
-    public Server(String host, int port, String registryName) {
+    public Server(String host, int port, String registryName) throws IOException {
         this.host = host;
         this.port = port;
         this.registryName = registryName;
         registryURL = "rmi://" + host + ":" + port
                 + "/" + registryName;
+
+        createDirectory();
     }
 
-    public static void main(String args[]) {
+    private void createDirectory() throws IOException {
+        Process p = Runtime.getRuntime().exec("mkdir ./server01");
 
+        p = Runtime.getRuntime().exec("ls");
+
+        readSystemCall(p);
+    }
+
+
+    private void readSystemCall(Process p) throws IOException {
+        String s;BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(p.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(p.getErrorStream()));
+
+        // read the output from the command
+        System.out.println("Here is the standard output of the command:\n");
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
+        }
+    }
+
+    public static void main(String args[]) throws IOException {
+
+        String registryName = "Mytube";
         if (args.length < 2) {
             System.err.println("Parameters: <host> <port> "
                     + "[registryName] [dbName]");
             System.exit(1);
         }
 
-        String registryName = (args.length < 3) ? "MyTube" : args[2];
-        String dbName = (args.length < 4) ? "contents.sqlite" : args[3];
 
         final Server s = new Server(args[0], Integer.parseInt(args[1]),
                 registryName);
@@ -56,7 +83,11 @@ public class Server {
                 } catch (Exception e) {
                     System.out.println("Can not finalize main process");
                 }
-                s.stopServer();
+                try {
+                    s.stopServer();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 System.exit(0);
             }
         });
@@ -87,7 +118,7 @@ public class Server {
     /**
      * Stopps the Server
      */
-    public void stopServer() {
+    public void stopServer() throws RemoteException {
         if (stub != null) {
             stub.exit();
         }
