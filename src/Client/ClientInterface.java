@@ -7,7 +7,7 @@ import java.util.List;
 public interface ClientInterface {
     List<ContentInterface> search(String keyWord);
 
-    List<ContentInterface> listAll();
+    List<String> listAll();
 
     ContentInterface download(String contentName);
 

@@ -106,8 +106,8 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public List<ContentInterface> listAll() {
-        List<ContentInterface> contents = new ArrayList<>();
+    public List<String> listAll() {
+        List<String> contents = new ArrayList<>();
         try {
             contents = stub.searchAll();
         } catch (RemoteException e) {
