@@ -9,7 +9,7 @@ public interface ClientInterface {
 
     List<ContentInterface> listAll();
 
-    ContentInterface download();
+    ContentInterface download(String contentName);
 
     String upload(ContentInterface content);
 

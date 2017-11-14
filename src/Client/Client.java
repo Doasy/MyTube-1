@@ -3,9 +3,7 @@ package Client;
 import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -82,7 +80,7 @@ public class Client implements ClientInterface{
                     client.upload(null);
                     break;
                 case 2:
-                    client.download();
+                    client.download("contentName");
                     break;
                 case 3:
                     client.listAll();
@@ -112,14 +110,40 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public ContentInterface download() {
-        //TODO
+    public ContentInterface download(String contentName) {
+        try {
+            byte[] filedata = stub.downloadContent(contentName);
+            File file = new File("path where we want to save the file" + contentName);
+            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file.getName()));
+            output.write(filedata, 0, filedata.length);
+            output.flush();
+            output.close();
+        }catch(Exception e){
+            System.err.println("FileServer Exception " + e.getMessage());
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public String upload(ContentInterface content) {
-        return null;
+        try{
+            File file = new File(content.getTitle());
+            byte buffer[] = new byte[(int)file.length()];
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(content.getTitle()));
+
+            input.read(buffer, 0, buffer.length);
+            input.close();
+
+            ContentInterface contentInterface = stub.uploadContent("title", "description", buffer);
+
+        }catch(Exception e){
+            System.out.println("FileImpl " + e.getMessage());
+            e.printStackTrace();
+
+            return(null);
+        }
+        return "message";
     }
 
     @Override
