@@ -17,10 +17,12 @@ public class Client implements ClientInterface{
     private String rmi_name;
     private Registry registry;
     private MyTubeInterface stub;
+    private String userName;
 
-    Client(String ip, int port){
+    Client(String ip, int port, String userName){
         this.port = port;
         this.ip = ip;
+        this.userName = userName;
         this.rmi_name = "MyTube";
         rmi_url = "rmi://" + ip + ":" + port + "/" + this.rmi_name;
     }
@@ -67,8 +69,8 @@ public class Client implements ClientInterface{
                 System.err.println("Parameters: <ip> <port>");
                 System.exit(1);
             }
-
-            final Client client = new Client(args[0], Integer.parseInt(args[1]));
+            String userName = registerIntoApp();
+            final Client client = new Client(args[0], Integer.parseInt(args[1]), userName);
             client.connectToTheServer();
             optionsMenu();
             option = Integer.parseInt(readInput());
@@ -95,6 +97,11 @@ public class Client implements ClientInterface{
         catch (Exception e) {
             System.out.println("Exception in Client: "+  e);
         }
+    }
+
+    private static String registerIntoApp() throws IOException {
+        System.out.println("Hi! What's your nikname?");
+        return readInput();
     }
 
 
@@ -147,7 +154,7 @@ public class Client implements ClientInterface{
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            uploadResponse = stub.uploadContent("title", "description", buffer);
+            uploadResponse = stub.uploadContent("title", "description", buffer, userName);
 
             System.out.println(uploadResponse);
 
