@@ -1,6 +1,5 @@
 package InterfaceImplement;
 
-import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
@@ -17,6 +16,7 @@ import java.util.List;
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
+    private static XMLParser xmlParser;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -24,96 +24,107 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public ContentInterface getContentFromKey(int key) throws RemoteException {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public ContentInterface getContentFromTitle(String title) throws RemoteException {
-        int id;
+    public String getContentFromKey(int key) throws RemoteException {
+        String contentName;
+        String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
         try{
             XMLParser xmlParser = new XMLParser();
-            id = xmlParser.XMLFindIdByTitle(title);
-            getContentFromKey(id);
-        }catch(JDOMException | IOException ex ){
-            ex.printStackTrace();
-        }
+            contentName = xmlParser.getNameById(Integer.toString(key));
+            pathToFile = pathToFile + contentName;
 
-        return null;
-    }
-
-    @Override
-    public List<String> searchFromKeyword(String keyword) throws RemoteException {
-
-        try{
-            XMLParser xmlParser = new XMLParser();
-            return xmlParser.XMLFindByKeyWord(keyword);
-
-        }catch(JDOMException | IOException ex ){
-            ex.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public List<String> searchAll() throws RemoteException {
-
-        try{
-            XMLParser xmlParser = new XMLParser();
-            return xmlParser.XMLShowALL();
+            return pathToFile;
 
         }catch(JDOMException | IOException ex){
             ex.printStackTrace();
         }
 
-        return null;
+        return "";
+    }
+
+    @Override
+    public String getContentFromTitle(String title) throws RemoteException {
+        int id;
+        String path = "";
+        try{
+            XMLParser xmlParser = new XMLParser();
+            id = xmlParser.XMLFindIdByTitle(title);
+            path = getContentFromKey(id);
+        }catch(JDOMException | IOException ex ){
+            ex.printStackTrace();
+        }
+
+        return path;
+    }
+
+    @Override
+    public List<String> searchFromKeyword(String keyword) throws RemoteException {
+        List<String> contentFound = new ArrayList<>();
+        try{
+            XMLParser xmlParser = new XMLParser();
+            contentFound =  xmlParser.XMLFindByKeyWord(keyword);
+
+        }catch(JDOMException | IOException ex ){
+            ex.printStackTrace();
+        }
+        return contentFound;
+    }
+
+    @Override
+    public List<String> searchAll() throws RemoteException {
+        List<String> allContent = new ArrayList<>();
+        try{
+            XMLParser xmlParser = new XMLParser();
+            allContent = xmlParser.XMLShowALL();
+
+        }catch(JDOMException | IOException ex){
+            ex.printStackTrace();
+        }
+
+        return allContent;
     }
 
 
     @Override
-    public String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
-        //TODO HASH
-        String hash = "";
+    public synchronized String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException {
+        String hash = xmlParser.newID();
         String response = "";
         BufferedOutputStream output;
-        File file = new File("./server/" + hash + title);
+        makeALinuxCall("mkdir ./server01/" + hash);
+        File file = new File("./server01/" + hash + "/" + title);
+
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
             response = "Successful upload!";
+
         } catch (FileNotFoundException e) {
             System.err.println("FileServer Exception " + e.getMessage());
             response = "there has been a problem with the file :S";
             e.printStackTrace();
+
         } catch (IOException e) {
             System.err.println("FileServer Exception " + e.getMessage());
             response = "there has been a IO problem :S";
             e.printStackTrace();
         }
-        xmlcreator.addElement(hash, title, description, "patata");
+
+        xmlcreator.addElement(hash, title, description, userName);
 
         return response;
     }
 
     @Override
-    public ContentInterface downloadContent() throws RemoteException {
-        return null;
-    }
-
-    //per que acabi de funciona obviament necessitem el sistema de fitxers montat i un metode que ens doni
-
-    //el path al fitxer que conté el nom passat per parametre
-    @Override
-    public byte[] downloadContent(String contentName) throws RemoteException {
+    public byte[] downloadContent(int id) throws RemoteException {
+        String path;
         try {
-            File file = new File(contentName);
+            path = getContentFromKey(id);
+
+            File file = new File(path);
             byte buffer[] = new byte[(int) file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(contentName));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(path));
 
             input.read(buffer, 0, buffer.length);
             input.close();
@@ -133,11 +144,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         //TODO
     }
 
-
     private Process makeALinuxCall(String command) {
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(command);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

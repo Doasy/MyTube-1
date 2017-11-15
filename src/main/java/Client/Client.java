@@ -1,6 +1,5 @@
 package Client;
 
-import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.*;
@@ -18,10 +17,12 @@ public class Client implements ClientInterface{
     private String rmi_name;
     private Registry registry;
     private MyTubeInterface stub;
+    private String userName;
 
-    Client(String ip, int port){
+    Client(String ip, int port, String userName){
         this.port = port;
         this.ip = ip;
+        this.userName = userName;
         this.rmi_name = "MyTube";
         rmi_url = "rmi://" + ip + ":" + port + "/" + this.rmi_name;
     }
@@ -50,7 +51,7 @@ public class Client implements ClientInterface{
                 System.setSecurityManager(new SecurityManager());
             }
             registry = LocateRegistry.getRegistry(ip, port);
-            stub = (MyTubeInterface) registry.lookup(rmi_name);
+            stub = (MyTubeInterface) registry.lookup("MyTube");
             //callbackObject = new MyTubeCallbackImpl();
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
@@ -68,14 +69,15 @@ public class Client implements ClientInterface{
                 System.err.println("Parameters: <ip> <port>");
                 System.exit(1);
             }
-
-            final Client client = new Client(args[0], Integer.parseInt(args[1]));
+            String userName = registerIntoApp();
+            final Client client = new Client(args[0], Integer.parseInt(args[1]), userName);
             client.connectToTheServer();
             optionsMenu();
             option = Integer.parseInt(readInput());
             switch (option){
                 case 0:
                     client.exit();
+                    break;
                 case 1:
                     //TODO
                     client.upload(null);
@@ -98,9 +100,24 @@ public class Client implements ClientInterface{
         }
     }
 
+    private static String registerIntoApp() throws IOException {
+        System.out.println("Hi! What's your nikname?");
+        return readInput();
+    }
+
 
     @Override
-    public List<String> search(String keyWord) {
+    public void search(String keyWord) {
+        StringBuilder listToPrint = new StringBuilder();
+        List<String> listOfSearchedItems= searchAsList(keyWord);;
+        for(String content : listOfSearchedItems){
+            listToPrint.append(content).append("\n");
+        }
+        System.out.println("The list of contents with keyword" + keyWord + "is:");
+        System.out.println(listToPrint);
+    }
+
+    private List<String> searchAsList(String keyWord) {
         List<String> contents = new ArrayList<>();
         try {
             contents = stub.searchFromKeyword(keyWord);
@@ -111,7 +128,17 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public List<String> listAll() {
+    public void listAll() {
+        StringBuilder listToPrint = new StringBuilder();
+        List<String> listOfContents= listAllAsList();
+        for(String content : listOfContents){
+            listToPrint.append(content).append("\n");
+        }
+        System.out.println("The list of all contents is:");
+        System.out.println(listToPrint);
+    }
+
+    private List<String> listAllAsList() {
         List<String> contents = new ArrayList<>();
         try {
             contents = stub.searchAll();
@@ -121,7 +148,6 @@ public class Client implements ClientInterface{
         return contents;
     }
 
-    @Override
     public void download() {
         int contentID = getContentID();
         if (contentID == -1) {
@@ -198,17 +224,17 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public String upload(ContentInterface content) {
+    public String upload(String content) {
         String uploadResponse = "";
         try{
-            File file = new File(content.getTitle());
+            File file = new File(content);
             byte buffer[] = new byte[(int)file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(content.getTitle()));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
 
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            uploadResponse = stub.uploadContent("title", "description", buffer);
+            uploadResponse = stub.uploadContent("title", "description", buffer, userName);
 
             System.out.println(uploadResponse);
 

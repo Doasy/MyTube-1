@@ -2,9 +2,7 @@ package Server;
 
 import InterfaceImplement.MyTubeImpl;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -51,7 +49,7 @@ public class Server {
 
     public static void main(String args[]) throws IOException {
 
-        String registryName = "Mytube";
+        String registryName = "MyTube";
         if (args.length < 2) {
             System.err.println("Parameters: <host> <port> "
                     + "[registryName] [dbName]");

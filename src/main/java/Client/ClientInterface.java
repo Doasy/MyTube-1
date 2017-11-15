@@ -1,17 +1,15 @@
 package Client;
 
-import Content.ContentInterface;
-
 import java.util.List;
 
 public interface ClientInterface {
-    List<String> search(String keyWord);
+    void search(String keyWord);
 
-    List<String> listAll();
+    void listAll();
 
-    ContentInterface download(String contentName);
+    void download();
 
-    String upload(ContentInterface content);
+    String upload(String contentName);
 
     void exit();
 }
