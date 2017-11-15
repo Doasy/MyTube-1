@@ -1,6 +1,5 @@
 package Client;
 
-import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.*;
@@ -123,7 +122,7 @@ public class Client implements ClientInterface{
 
 
     @Override
-    public ContentInterface download(String contentName) {
+    public void download(String contentName) {
         try {
             byte[] filedata = stub.downloadContent(contentName);
             File file = new File("path where we want to save the file" + contentName);
@@ -131,20 +130,19 @@ public class Client implements ClientInterface{
             output.write(filedata, 0, filedata.length);
             output.flush();
             output.close();
-        }catch(Exception e){
+        }catch(Exception e) {
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override
-    public String upload(ContentInterface content) {
+    public String upload(String content) {
         String uploadResponse = "";
         try{
-            File file = new File(content.getTitle());
+            File file = new File(content);
             byte buffer[] = new byte[(int)file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(content.getTitle()));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
 
             input.read(buffer, 0, buffer.length);
             input.close();

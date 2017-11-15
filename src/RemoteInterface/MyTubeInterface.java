@@ -1,7 +1,5 @@
 package RemoteInterface;
 
-import Content.ContentInterface;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -15,22 +13,17 @@ public interface MyTubeInterface extends Remote {
      * @return Content with specified key
      * @throws RemoteException if can't make the petition to the Server
      */
-    public ContentInterface getContentFromKey(int key) throws RemoteException;
+    String getContentFromKey(int key) throws RemoteException;
 
+    String getContentFromTitle(String title) throws RemoteException;
 
-    public ContentInterface getContentFromTitle(String title) throws RemoteException;
+    List<String> searchFromKeyword(String keyword) throws RemoteException;
 
+    List<String> searchAll() throws RemoteException;
 
-    public List<String> searchFromKeyword(String keyword)
-            throws RemoteException;
+    String uploadContent(String title, String description, byte[] fileData) throws RemoteException;
 
-    public List<String> searchAll() throws RemoteException;
-
-    public String uploadContent(String title, String description, byte[] fileData)
-            throws RemoteException;
-
-    public ContentInterface downloadContent()
-            throws RemoteException;
+    byte[] downloadContent(String contentName) throws RemoteException;
 
     /**
      * Add a MyTubeCallback object into the callback objects lists
@@ -44,14 +37,10 @@ public interface MyTubeInterface extends Remote {
     /**
      * Removes a MyTubeCallback object from the callback objects list
      *
-     * @param callbackObject callbackObject to remove from callback list
      * @throws RemoteException if can't make the petition to the Server
      */
    /* public void removeCallback(MyTubeCallback callbackObject)
             throws RemoteException;*/
-
-
-    byte[] downloadContent(String contentName) throws RemoteException;
 
     void exit() throws RemoteException;
 }

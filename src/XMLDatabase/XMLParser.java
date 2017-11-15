@@ -64,4 +64,10 @@ public class XMLParser {
         }
         return 0;
     }
+
+    public String getLastId(){
+        List<Element> contentList = classElement.getChildren();
+
+        return contentList.get(-1).getAttributeValue("id");
+    }
 }

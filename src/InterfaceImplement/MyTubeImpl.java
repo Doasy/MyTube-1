@@ -1,6 +1,5 @@
 package InterfaceImplement;
 
-import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
@@ -24,52 +23,52 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public ContentInterface getContentFromKey(int key) throws RemoteException {
-        //TODO
+    public String getContentFromKey(int key) throws RemoteException {
+        String pathToFile = "./server01/" + Integer.toString(key) + "/"
+
         return null;
     }
 
     @Override
-    public ContentInterface getContentFromTitle(String title) throws RemoteException {
+    public String getContentFromTitle(String title) throws RemoteException {
         int id;
-
+        String path = "";
         try{
             XMLParser xmlParser = new XMLParser();
             id = xmlParser.XMLFindIdByTitle(title);
-            getContentFromKey(id);
+            path = getContentFromKey(id);
         }catch(JDOMException | IOException ex ){
             ex.printStackTrace();
         }
 
-        return null;
+        return path;
     }
 
     @Override
     public List<String> searchFromKeyword(String keyword) throws RemoteException {
-
+        List<String> contentFound = new ArrayList<>();
         try{
             XMLParser xmlParser = new XMLParser();
-            return xmlParser.XMLFindByKeyWord(keyword);
+            contentFound =  xmlParser.XMLFindByKeyWord(keyword);
 
         }catch(JDOMException | IOException ex ){
             ex.printStackTrace();
         }
-
-        return null;
+        return contentFound;
     }
 
     @Override
     public List<String> searchAll() throws RemoteException {
-
+        List<String> allContent = new ArrayList<>();
         try{
             XMLParser xmlParser = new XMLParser();
-            return xmlParser.XMLShowALL();
+            allContent = xmlParser.XMLShowALL();
 
         }catch(JDOMException | IOException ex){
             ex.printStackTrace();
         }
 
-        return null;
+        return allContent;
     }
 
 
@@ -80,34 +79,30 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         String response = "";
         BufferedOutputStream output;
         File file = new File("./server/" + hash + title);
+
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
             response = "Successful upload!";
+
         } catch (FileNotFoundException e) {
             System.err.println("FileServer Exception " + e.getMessage());
             response = "there has been a problem with the file :S";
             e.printStackTrace();
+
         } catch (IOException e) {
             System.err.println("FileServer Exception " + e.getMessage());
             response = "there has been a IO problem :S";
             e.printStackTrace();
         }
+
         xmlcreator.addElement(hash, title, description, "patata");
 
         return response;
     }
 
-    @Override
-    public ContentInterface downloadContent() throws RemoteException {
-        return null;
-    }
-
-    //per que acabi de funciona obviament necessitem el sistema de fitxers montat i un metode que ens doni
-
-    //el path al fitxer que conté el nom passat per parametre
     @Override
     public byte[] downloadContent(String contentName) throws RemoteException {
         try {
@@ -133,11 +128,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         //TODO
     }
 
-
     private Process makeALinuxCall(String command) {
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(command);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
