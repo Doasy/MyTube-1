@@ -36,12 +36,12 @@ public class XMLCreator {
         }
     }
 
-    public void addElement(String id, String ContentTitle, String ContentDescription, String uploaderName){
+    public void addElement(String id, String contentTitle, String contentDescription, String uploaderName){
         try{
             Element content = addContent(id);
 
-            addTitleAttr(ContentTitle, content);
-            addDescriptionAttr(ContentDescription, content);
+            addTitleAttr(contentTitle, content);
+            addDescriptionAttr(contentDescription, content);
             addUploaderAttr(uploaderName, content);
 
             writeXML();
