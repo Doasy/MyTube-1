@@ -51,7 +51,7 @@ public class Server {
 
     public static void main(String args[]) throws IOException {
 
-        String registryName = "Mytube";
+        String registryName = "MyTube";
         if (args.length < 2) {
             System.err.println("Parameters: <host> <port> "
                     + "[registryName] [dbName]");
