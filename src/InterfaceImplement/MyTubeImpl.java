@@ -25,9 +25,21 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public String getContentFromKey(int key) throws RemoteException {
+        String contentName;
         String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
-        return null;
+        try{
+            XMLParser xmlParser = new XMLParser();
+            contentName = xmlParser.getNameById(Integer.toString(key));
+            pathToFile = pathToFile + contentName;
+
+            return pathToFile;
+
+        }catch(JDOMException | IOException ex){
+            ex.printStackTrace();
+        }
+
+        return "";
     }
 
     @Override
@@ -105,8 +117,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public byte[] downloadContent(String path) throws RemoteException {
+    public byte[] downloadContent(int id) throws RemoteException {
+        String path;
         try {
+            path = getContentFromKey(id);
+
             File file = new File(path);
             byte buffer[] = new byte[(int) file.length()];
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(path));

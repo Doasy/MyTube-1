@@ -23,7 +23,7 @@ public interface MyTubeInterface extends Remote {
 
     String uploadContent(String title, String description, byte[] fileData) throws RemoteException;
 
-    byte[] downloadContent(String contentName) throws RemoteException;
+    byte[] downloadContent(int id) throws RemoteException;
 
     /**
      * Add a MyTubeCallback object into the callback objects lists
