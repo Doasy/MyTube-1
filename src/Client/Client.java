@@ -107,7 +107,17 @@ public class Client implements ClientInterface{
 
 
     @Override
-    public List<String> search(String keyWord) {
+    public void search(String keyWord) {
+        StringBuilder listToPrint = new StringBuilder();
+        List<String> listOfSearchedItems= searchAsList(keyWord);;
+        for(String content : listOfSearchedItems){
+            listToPrint.append(content).append("\n");
+        }
+        System.out.println("The list of contents with keyword" + keyWord + "is:");
+        System.out.println(listToPrint);
+    }
+
+    private List<String> searchAsList(String keyWord) {
         List<String> contents = new ArrayList<>();
         try {
             contents = stub.searchFromKeyword(keyWord);
@@ -118,7 +128,17 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public List<String> listAll() {
+    public void listAll() {
+        StringBuilder listToPrint = new StringBuilder();
+        List<String> listOfContents= listAllAsList();
+        for(String content : listOfContents){
+            listToPrint.append(content).append("\n");
+        }
+        System.out.println("The list of all contents is:");
+        System.out.println(listToPrint);
+    }
+
+    private List<String> listAllAsList() {
         List<String> contents = new ArrayList<>();
         try {
             contents = stub.searchAll();

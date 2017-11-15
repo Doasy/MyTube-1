@@ -3,9 +3,9 @@ package Client;
 import java.util.List;
 
 public interface ClientInterface {
-    List<String> search(String keyWord);
+    void search(String keyWord);
 
-    List<String> listAll();
+    void listAll();
 
     void download(String contentName);
 
