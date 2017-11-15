@@ -82,6 +82,11 @@ public class XMLParser {
         return "";
     }
 
+    public boolean idExists(String id){
+        String response = getNameById(id);
+        return !response.equals("");
+    }
+
     public String getLastId(){
         List<Element> contentList = classElement.getChildren();
 
