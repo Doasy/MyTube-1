@@ -24,7 +24,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public String getContentFromKey(int key) throws RemoteException {
-        String pathToFile = "./server01/" + Integer.toString(key) + "/"
+        String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
         return null;
     }
