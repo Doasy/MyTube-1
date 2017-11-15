@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -21,6 +22,13 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
         xmlcreator = new XMLCreator();
+    }
+
+    @Override
+    public String getTitleFromKey(int key) throws RemoteException {
+        XMLParser xmlParser = new XMLParser();
+
+        return xmlParser.getNameById(Integer.toString(key));
     }
 
     @Override
@@ -139,7 +147,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(command);
-
         } catch (IOException e) {
             e.printStackTrace();
         }

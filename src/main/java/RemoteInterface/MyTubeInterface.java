@@ -17,6 +17,8 @@ public interface MyTubeInterface extends Remote {
 
     String getContentFromTitle(String title) throws RemoteException;
 
+    String getTitleFromKey(int key) throws RemoteException;
+
     List<String> searchFromKeyword(String keyword) throws RemoteException;
 
     List<String> searchAll() throws RemoteException;

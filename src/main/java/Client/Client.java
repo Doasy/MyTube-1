@@ -161,15 +161,23 @@ public class Client implements ClientInterface{
     }
 
     public void download() {
+        String home = System.getProperty("user.home");
         int contentID = getContentID();
         if (contentID == -1) {
             optionsMenu();
         }
+
+
+
         try {
             byte[] filedata = stub.downloadContent(contentID);
+            String title = stub.getTitleFromKey(contentID);
 
-            File file = new File("path where we want to save the file" + contentID);
-            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file.getName()));
+            File file = new File(home + "/Downloads/" + title);
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+
+            FileOutputStream output = new FileOutputStream(file);
 
             output.write(filedata, 0, filedata.length);
             output.flush();
