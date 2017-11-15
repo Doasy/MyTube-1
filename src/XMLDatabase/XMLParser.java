@@ -65,6 +65,17 @@ public class XMLParser {
         return 0;
     }
 
+    public String getNameById(String id){
+        List<Element> contentList  = classElement.getChildren();
+
+        for (Element content : contentList){
+            if(content.getAttributeValue("id").equals(id)){
+                return content.getChild("Title").getText();
+            }
+        }
+        return "";
+    }
+
     public String getLastId(){
         List<Element> contentList = classElement.getChildren();
 
