@@ -1,5 +1,7 @@
 package Client;
 
+import Content.ContentInterface;
+
 import java.util.List;
 
 public interface ClientInterface {
@@ -7,9 +9,9 @@ public interface ClientInterface {
 
     List<String> listAll();
 
-    void download();
+    ContentInterface download(String contentName);
 
-    String upload(String contentName);
+    String upload(ContentInterface content);
 
     void exit();
 }

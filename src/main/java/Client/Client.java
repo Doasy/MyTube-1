@@ -1,5 +1,6 @@
 package Client;
 
+import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.*;
@@ -49,7 +50,7 @@ public class Client implements ClientInterface{
                 System.setSecurityManager(new SecurityManager());
             }
             registry = LocateRegistry.getRegistry(ip, port);
-            stub = (MyTubeInterface) registry.lookup("MyTube");
+            stub = (MyTubeInterface) registry.lookup(rmi_name);
             //callbackObject = new MyTubeCallbackImpl();
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
@@ -120,6 +121,7 @@ public class Client implements ClientInterface{
         return contents;
     }
 
+    @Override
     public void download() {
         int contentID = getContentID();
         if (contentID == -1) {
@@ -196,12 +198,12 @@ public class Client implements ClientInterface{
     }
 
     @Override
-    public String upload(String content) {
+    public String upload(ContentInterface content) {
         String uploadResponse = "";
         try{
-            File file = new File(content);
+            File file = new File(content.getTitle());
             byte buffer[] = new byte[(int)file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(content.getTitle()));
 
             input.read(buffer, 0, buffer.length);
             input.close();
