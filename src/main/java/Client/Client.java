@@ -44,6 +44,7 @@ public class Client implements ClientInterface{
 
         return input;
     }
+
     public void connectToTheServer() throws NotBoundException {
         try {
             System.setProperty("java.security.policy", "security.policy");
@@ -83,7 +84,7 @@ public class Client implements ClientInterface{
                     client.upload(null);
                     break;
                 case 2:
-                    client.download("contentName");
+                    client.download();
                     break;
                 case 3:
                     client.listAll();
@@ -92,7 +93,6 @@ public class Client implements ClientInterface{
                     //TODO
                     client.search(null);
                     break;
-
             }
         }
         catch (Exception e) {
@@ -109,7 +109,7 @@ public class Client implements ClientInterface{
     @Override
     public void search(String keyWord) {
         StringBuilder listToPrint = new StringBuilder();
-        List<String> listOfSearchedItems= searchAsList(keyWord);;
+        List<String> listOfSearchedItems = searchAsList(keyWord);
         for(String content : listOfSearchedItems){
             listToPrint.append(content).append("\n");
         }
@@ -198,21 +198,20 @@ public class Client implements ClientInterface{
     }
 
     private boolean isAnswerYes() {
-        String knowsID = null;
+        String knowsID = "";
         try {
             knowsID = readInput();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (knowsID.equals("Y") || knowsID.equals("y"));
+        return (knowsID.toLowerCase().equals("y"));
     }
 
     private int getFileIDFromName() {
         System.out.println("Introduce the file name: ");
         String fileName = readFromInput();
         search(fileName);
-        int fileID = Integer.parseInt(readFromInput());
-        return fileID;
+        return Integer.parseInt(readFromInput());
     }
 
     private String readFromInput() {
