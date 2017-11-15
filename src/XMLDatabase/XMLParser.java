@@ -33,6 +33,12 @@ public class XMLParser {
         return listOfTitles;
     }
 
+    public synchronized String newID(){
+        return String.valueOf(Integer.parseInt(getLastId())+1);
+    }
+
+
+
     public List<String> XMLFindByKeyWord(String keyWord){
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();

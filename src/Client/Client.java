@@ -49,7 +49,7 @@ public class Client implements ClientInterface{
                 System.setSecurityManager(new SecurityManager());
             }
             registry = LocateRegistry.getRegistry(ip, port);
-            stub = (MyTubeInterface) registry.lookup(rmi_name);
+            stub = (MyTubeInterface) registry.lookup("MyTube");
             //callbackObject = new MyTubeCallbackImpl();
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);

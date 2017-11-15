@@ -16,6 +16,7 @@ import java.util.List;
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
+    private static XMLParser xmlParser;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -73,12 +74,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
 
     @Override
-    public String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
-        //TODO HASH
-        String hash = "";
+    public synchronized String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
+        String hash = xmlParser.newID();
         String response = "";
         BufferedOutputStream output;
-        File file = new File("./server/" + hash + title);
+        makeALinuxCall("cd ./server01/"+hash);
+        File file = new File("./server01/" + hash + title);
 
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
@@ -98,7 +99,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             e.printStackTrace();
         }
 
-        xmlcreator.addElement(hash, title, description, "patata");
+        xmlcreator.addElement(hash, title, description, title);
 
         return response;
     }
