@@ -7,7 +7,7 @@ public interface ClientInterface {
 
     void listAll();
 
-    void download(String contentName);
+    void download();
 
     String upload(String contentName);
 

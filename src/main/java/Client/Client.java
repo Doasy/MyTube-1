@@ -148,12 +148,14 @@ public class Client implements ClientInterface{
         return contents;
     }
 
-
-    @Override
-    public void download(String contentName) {
+    public void download() {
+        int contentID = getContentID();
+        if (contentID == -1) {
+            optionsMenu();
+        }
         try {
-            byte[] filedata = stub.downloadContent(contentName);
-            File file = new File("path where we want to save the file" + contentName);
+            byte[] filedata = stub.downloadContent(contentID);
+            File file = new File("path where we want to save the file" + contentID);
             BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file.getName()));
             output.write(filedata, 0, filedata.length);
             output.flush();
@@ -161,6 +163,63 @@ public class Client implements ClientInterface{
         }catch(Exception e) {
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private int getContentID() {
+        System.out.println("Do you know the file ID (Yy/Nn)?  ");
+        if (isAnswerYes()) {
+            return getFileIDFromID();
+        }
+        return getFileIDFromName();
+    }
+
+    private int getFileIDFromID() {
+        System.out.println("Introduce the file ID: ");
+        int fileID = Integer.parseInt(readFromInput());
+        if (isValidID(fileID)) {
+            System.out.println("Downloading...");
+            return fileID;
+        }
+        return invalidIDTreatment();
+    }
+
+    private boolean isValidID(int fileID) {
+        //TODO: IMPLEMENT
+        return true;
+    }
+
+    private int invalidIDTreatment() {
+        System.out.println("Invalid ID. Try again (Yy/Nn)? ");
+        if (isAnswerYes()) {
+            return getFileIDFromID();
+        }
+        return -1;
+    }
+
+    private boolean isAnswerYes() {
+        String knowsID = null;
+        try {
+            knowsID = readInput();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return (knowsID.equals("Y") || knowsID.equals("y"));
+    }
+
+    private int getFileIDFromName() {
+        System.out.println("Introduce the file name: ");
+        String fileName = readFromInput();
+        search(fileName);
+        int fileID = Integer.parseInt(readFromInput());
+        return fileID;
+    }
+
+    private String readFromInput() {
+        try {
+            return readInput();
+        } catch (IOException e) {
+            return "";
         }
     }
 
