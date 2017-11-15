@@ -25,9 +25,21 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public String getContentFromKey(int key) throws RemoteException {
+        String contentName;
         String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
-        return null;
+        try{
+            XMLParser xmlParser = new XMLParser();
+            contentName = xmlParser.getNameById(Integer.toString(key));
+            pathToFile = pathToFile + contentName;
+
+            return pathToFile;
+
+        }catch(JDOMException | IOException ex){
+            ex.printStackTrace();
+        }
+
+        return "";
     }
 
     @Override
@@ -74,12 +86,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
 
     @Override
-    public synchronized String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
+    public synchronized String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException {
         String hash = xmlParser.newID();
         String response = "";
         BufferedOutputStream output;
-        makeALinuxCall("cd ./server01/"+hash);
-        File file = new File("./server01/" + hash + title);
+        makeALinuxCall("mkdir ./server01/" + hash);
+        File file = new File("./server01/" + hash + "/" + title);
 
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
@@ -99,17 +111,20 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             e.printStackTrace();
         }
 
-        xmlcreator.addElement(hash, title, description, title);
+        xmlcreator.addElement(hash, title, description, userName);
 
         return response;
     }
 
     @Override
-    public byte[] downloadContent(String contentName) throws RemoteException {
+    public byte[] downloadContent(int id) throws RemoteException {
+        String path;
         try {
-            File file = new File(contentName);
+            path = getContentFromKey(id);
+
+            File file = new File(path);
             byte buffer[] = new byte[(int) file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(contentName));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(path));
 
             input.read(buffer, 0, buffer.length);
             input.close();

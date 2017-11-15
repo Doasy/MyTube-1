@@ -21,9 +21,9 @@ public interface MyTubeInterface extends Remote {
 
     List<String> searchAll() throws RemoteException;
 
-    String uploadContent(String title, String description, byte[] fileData) throws RemoteException;
+    String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException;
 
-    byte[] downloadContent(String contentName) throws RemoteException;
+    byte[] downloadContent(int id) throws RemoteException;
 
     /**
      * Add a MyTubeCallback object into the callback objects lists

@@ -33,10 +33,8 @@ public class XMLParser {
         return listOfTitles;
     }
 
-    public synchronized  String newID(){
-        List<Element> contentList = classElement.getChildren();
-
-        return contentList.get(contentList.size()-1).getChild("ID").getText();
+    public synchronized String newID(){
+        return String.valueOf(Integer.parseInt(getLastId())+1);
     }
 
 
@@ -71,6 +69,22 @@ public class XMLParser {
             }
         }
         return 0;
+    }
+
+    public String getNameById(String id){
+        List<Element> contentList  = classElement.getChildren();
+
+        for (Element content : contentList){
+            if(content.getAttributeValue("id").equals(id)){
+                return content.getChild("Title").getText();
+            }
+        }
+        return "";
+    }
+
+    public boolean idExists(String id){
+        String response = getNameById(id);
+        return !response.equals("");
     }
 
     public String getLastId(){
