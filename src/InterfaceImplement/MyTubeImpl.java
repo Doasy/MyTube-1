@@ -78,7 +78,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         String hash = xmlParser.newID();
         String response = "";
         BufferedOutputStream output;
-        makeALinuxCall("cd ./server01/"+hash);
+        makeALinuxCall("mkdir ./server01/"+hash);
         File file = new File("./server01/" + hash + title);
 
         try {
@@ -105,11 +105,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public byte[] downloadContent(String contentName) throws RemoteException {
+    public byte[] downloadContent(String path) throws RemoteException {
         try {
-            File file = new File(contentName);
+            File file = new File(path);
             byte buffer[] = new byte[(int) file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(contentName));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(path));
 
             input.read(buffer, 0, buffer.length);
             input.close();
