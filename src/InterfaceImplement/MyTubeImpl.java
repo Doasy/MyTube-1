@@ -90,8 +90,8 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         String hash = xmlParser.newID();
         String response = "";
         BufferedOutputStream output;
-        makeALinuxCall("mkdir ./server01/"+hash);
-        File file = new File("./server01/" + hash + title);
+        makeALinuxCall("mkdir ./server01/" + hash);
+        File file = new File("./server01/" + hash + "/" + title);
 
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
