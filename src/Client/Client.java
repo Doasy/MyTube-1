@@ -77,6 +77,7 @@ public class Client implements ClientInterface{
             switch (option){
                 case 0:
                     client.exit();
+                    break;
                 case 1:
                     //TODO
                     client.upload(null);
