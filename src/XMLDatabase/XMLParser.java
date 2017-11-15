@@ -56,7 +56,6 @@ public class XMLParser {
 
     public int XMLFindIdByTitle(String title){
         List<Element> contentList = classElement.getChildren();
-        List<String> listOfTitles = new ArrayList<>();
 
         for (Element content : contentList) {
             if(title.toLowerCase().equals(content.getChild("Title").getText().toLowerCase())){

@@ -3,6 +3,8 @@ package InterfaceImplement;
 import Content.ContentInterface;
 import RemoteInterface.MyTubeInterface;
 import XMLDatabase.XMLCreator;
+import XMLDatabase.XMLParser;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
-    String systemFile= "./server01";
-    static XMLCreator xmlcreator ;
+    private String systemFile = "./server01";
+    private static XMLCreator xmlcreator;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -29,45 +31,62 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public ContentInterface getContentFromTitle(String title) throws RemoteException {
-        //TODO
+        int id;
+
+        try{
+            XMLParser xmlParser = new XMLParser();
+            id = xmlParser.XMLFindIdByTitle(title);
+            getContentFromKey(id);
+        }catch(JDOMException | IOException ex ){
+            ex.printStackTrace();
+        }
+
         return null;
     }
 
-
     @Override
     public List<String> searchFromKeyword(String keyword) throws RemoteException {
-        //TODO
-         return null;
+
+        try{
+            XMLParser xmlParser = new XMLParser();
+            return xmlParser.XMLFindByKeyWord(keyword);
+
+        }catch(JDOMException | IOException ex ){
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
     public List<String> searchAll() throws RemoteException {
-        Process call = makeALinuxCall("ls ./server01");
-        try {
-            readSystemCallAsList(call);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        try{
+            XMLParser xmlParser = new XMLParser();
+            return xmlParser.XMLShowALL();
+
+        }catch(JDOMException | IOException ex){
+            ex.printStackTrace();
         }
 
         return null;
     }
 
 
-
     @Override
     public String uploadContent(String title, String description, byte[] fileData) throws RemoteException {
         //TODO HASH
-        String hash="";
+        String hash = "";
         String response = "";
         BufferedOutputStream output;
-        File file = new File("./server/" + hash +  title);
+        File file = new File("./server/" + hash + title);
         try {
             output = new BufferedOutputStream(new FileOutputStream(file.getName()));
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
             response = "Successful upload!";
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.err.println("FileServer Exception " + e.getMessage());
             response = "there has been a problem with the file :S";
             e.printStackTrace();
@@ -77,9 +96,8 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             e.printStackTrace();
         }
         xmlcreator.addElement(hash, title, description, "patata");
+
         return response;
-
-
     }
 
     @Override
@@ -91,26 +109,27 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     //el path al fitxer que conté el nom passat per parametre
     @Override
-    public byte[] downloadContent(String contentName) throws RemoteException{
-        try{
+    public byte[] downloadContent(String contentName) throws RemoteException {
+        try {
             File file = new File(contentName);
-            byte buffer[] = new byte[(int)file.length()];
+            byte buffer[] = new byte[(int) file.length()];
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(contentName));
 
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            return(buffer);
+            return (buffer);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("FileImpl " + e.getMessage());
             e.printStackTrace();
 
-            return(null);
+            return (null);
         }
     }
+
     @Override
-    public void exit() throws RemoteException{
+    public void exit() throws RemoteException {
         //TODO
     }
 
@@ -131,14 +150,14 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
         BufferedReader stdInput = readSystemCall(p);
         while ((line = stdInput.readLine()) != null) {
-            response+=line;
+            response += line;
         }
         return response;
     }
 
     private List<String> readSystemCallAsList(Process p) throws IOException {
-        List<String>  response= new ArrayList<>();
-        String line ="";
+        List<String> response = new ArrayList<>();
+        String line = "";
         BufferedReader stdInput = readSystemCall(p);
         while ((line = stdInput.readLine()) != null) {
             response.add(line);
