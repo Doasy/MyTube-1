@@ -12,11 +12,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
-    private static XMLParser xmlParser;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -28,18 +28,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         String contentName;
         String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
-        try{
-            XMLParser xmlParser = new XMLParser();
-            contentName = xmlParser.getNameById(Integer.toString(key));
-            pathToFile = pathToFile + contentName;
+        XMLParser xmlParser = new XMLParser();
+        contentName = xmlParser.getNameById(Integer.toString(key));
+        pathToFile = pathToFile + contentName;
 
-            return pathToFile;
-
-        }catch(JDOMException | IOException ex){
-            ex.printStackTrace();
-        }
-
-        return "";
+        return pathToFile;
     }
 
     @Override
@@ -50,7 +43,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             XMLParser xmlParser = new XMLParser();
             id = xmlParser.XMLFindIdByTitle(title);
             path = getContentFromKey(id);
-        }catch(JDOMException | IOException ex ){
+        }catch(IOException ex ){
             ex.printStackTrace();
         }
 
@@ -59,27 +52,18 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public List<String> searchFromKeyword(String keyword) throws RemoteException {
-        List<String> contentFound = new ArrayList<>();
-        try{
-            XMLParser xmlParser = new XMLParser();
-            contentFound =  xmlParser.XMLFindByKeyWord(keyword);
+        List<String> contentFound;
+        XMLParser xmlParser = new XMLParser();
+        contentFound =  xmlParser.XMLFindByKeyWord(keyword);
 
-        }catch(JDOMException | IOException ex ){
-            ex.printStackTrace();
-        }
         return contentFound;
     }
 
     @Override
     public List<String> searchAll() throws RemoteException {
-        List<String> allContent = new ArrayList<>();
-        try{
-            XMLParser xmlParser = new XMLParser();
-            allContent = xmlParser.XMLShowALL();
-
-        }catch(JDOMException | IOException ex){
-            ex.printStackTrace();
-        }
+        List<String> allContent;
+        XMLParser xmlParser = new XMLParser();
+        allContent = xmlParser.XMLShowALL();
 
         return allContent;
     }
@@ -87,17 +71,24 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public synchronized String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException {
+
+        XMLParser xmlParser = new XMLParser();
         String hash = xmlParser.newID();
         String response = "";
-        BufferedOutputStream output;
+        FileOutputStream output;
+        String pathOfFile = "." + File.separator + "server01" + File.separator + hash + File.separator + title;
+        System.out.println(title);
         makeALinuxCall("mkdir ./server01/" + hash);
-        File file = new File("./server01/" + hash + "/" + title);
 
         try {
-            output = new BufferedOutputStream(new FileOutputStream(file.getName()));
+            File file = new File(pathOfFile);
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            output = new FileOutputStream(file);
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
+
             response = "Successful upload!";
 
         } catch (FileNotFoundException e) {

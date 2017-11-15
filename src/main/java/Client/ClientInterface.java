@@ -9,7 +9,7 @@ public interface ClientInterface {
 
     void download();
 
-    String upload(String contentName);
+    String upload(String contentPath, String description);
 
     void exit();
 }

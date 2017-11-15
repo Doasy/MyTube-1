@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -17,21 +18,33 @@ import java.io.File;
 import java.io.IOException;
 
 public class XMLCreator {
-    private String filename = "server01/Contents.xml";
+    private String filename = "./server01/Contents.xml";
     private DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     private DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     private Document document;
     private Element classElement;
 
-    public XMLCreator() throws ParserConfigurationException, IOException, SAXException {
+    public XMLCreator() throws ParserConfigurationException {
         File file = new File(filename);
-        if(file.exists()){
-            this.document = dBuilder.parse(file);
-            classElement = document.getDocumentElement();
-        }else {
-            this.document = dBuilder.newDocument();
-            this.classElement = document.createElement("Contents");
-            document.appendChild(classElement);
+
+        try {
+            if (file.exists()) {
+
+                this.document = dBuilder.parse(file);
+                classElement = document.getDocumentElement();
+            } else {
+
+                this.document = dBuilder.newDocument();
+                this.classElement = document.createElement("Contents");
+                document.appendChild(classElement);
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                DOMSource source = new DOMSource(document);
+                StreamResult result = new StreamResult(new File(this.filename));
+                transformer.transform(source, result);
+            }
+        }catch( IOException | SAXException | TransformerException ex){
+            ex.printStackTrace();
         }
     }
 

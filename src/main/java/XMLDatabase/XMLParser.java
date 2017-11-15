@@ -16,11 +16,16 @@ public class XMLParser {
     private Document document;
     private Element classElement;
 
-    public XMLParser() throws JDOMException, IOException {
-        File file = new File(filename);
-        SAXBuilder saxBuilder = new SAXBuilder();
-        this.document = saxBuilder.build(file);
-        this.classElement = (Element) document.getRootElement();
+    public XMLParser(){
+        try {
+            File file = new File(filename);
+            SAXBuilder saxBuilder = new SAXBuilder();
+
+            this.document = saxBuilder.build(file);
+            this.classElement = document.getRootElement();
+        }catch (JDOMException | IOException ex){
+            ex.printStackTrace();
+        }
     }
 
     public List<String> XMLShowALL(){
@@ -87,9 +92,13 @@ public class XMLParser {
         return !response.equals("");
     }
 
-    public String getLastId(){
+    private String getLastId(){
         List<Element> contentList = classElement.getChildren();
 
-        return contentList.get(-1).getAttributeValue("id");
+        if(contentList.isEmpty()){
+            return "0";
+        }
+
+        return contentList.get(contentList.size()-1).getAttributeValue("id");
     }
 }

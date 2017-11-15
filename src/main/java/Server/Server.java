@@ -1,7 +1,12 @@
 package Server;
 
 import InterfaceImplement.MyTubeImpl;
+import XMLDatabase.XMLCreator;
+import XMLDatabase.XMLParser;
+import org.jdom2.JDOMException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -56,7 +61,6 @@ public class Server {
             System.exit(1);
         }
 
-
         final Server s = new Server(args[0], Integer.parseInt(args[1]),
                 registryName);
 
@@ -78,6 +82,12 @@ public class Server {
                 System.exit(0);
             }
         });
+
+        try{
+            XMLCreator xmlCreator = new XMLCreator();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         s.runServer();
 

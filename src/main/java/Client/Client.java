@@ -65,6 +65,7 @@ public class Client implements ClientInterface{
 
     public static void main(String args[]) {
         int option;
+        String[] fileInfo;
         try {
             if (args.length < 2) {
                 System.err.println("Parameters: <ip> <port>");
@@ -80,8 +81,8 @@ public class Client implements ClientInterface{
                     client.exit();
                     break;
                 case 1:
-                    //TODO
-                    client.upload(null);
+                    fileInfo = client.getInfoUpload();
+                    client.upload(fileInfo[0], fileInfo[1]);
                     break;
                 case 2:
                     client.download();
@@ -102,6 +103,7 @@ public class Client implements ClientInterface{
 
     private static String registerIntoApp() throws IOException {
         System.out.println("Hi! What's your nikname?");
+
         return readInput();
     }
 
@@ -110,20 +112,24 @@ public class Client implements ClientInterface{
     public void search(String keyWord) {
         StringBuilder listToPrint = new StringBuilder();
         List<String> listOfSearchedItems = searchAsList(keyWord);
+
         for(String content : listOfSearchedItems){
             listToPrint.append(content).append("\n");
         }
+
         System.out.println("The list of contents with keyword" + keyWord + "is:");
         System.out.println(listToPrint);
     }
 
     private List<String> searchAsList(String keyWord) {
         List<String> contents = new ArrayList<>();
+
         try {
             contents = stub.searchFromKeyword(keyWord);
         } catch (RemoteException e) {
             System.err.println("Problem searching files");
         }
+
         return contents;
     }
 
@@ -131,20 +137,26 @@ public class Client implements ClientInterface{
     public void listAll() {
         StringBuilder listToPrint = new StringBuilder();
         List<String> listOfContents= listAllAsList();
+
         for(String content : listOfContents){
             listToPrint.append(content).append("\n");
         }
+
         System.out.println("The list of all contents is:");
         System.out.println(listToPrint);
     }
 
     private List<String> listAllAsList() {
         List<String> contents = new ArrayList<>();
+
         try {
+
             contents = stub.searchAll();
         } catch (RemoteException e) {
+
             System.err.println("Problem searching files");
         }
+
         return contents;
     }
 
@@ -155,12 +167,15 @@ public class Client implements ClientInterface{
         }
         try {
             byte[] filedata = stub.downloadContent(contentID);
+
             File file = new File("path where we want to save the file" + contentID);
             BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file.getName()));
+
             output.write(filedata, 0, filedata.length);
             output.flush();
             output.close();
         }catch(Exception e) {
+
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
@@ -168,19 +183,25 @@ public class Client implements ClientInterface{
 
     private int getContentID() {
         System.out.println("Do you know the file ID (Yy/Nn)?  ");
+
         if (isAnswerYes()) {
+
             return getFileIDFromID();
         }
+
         return getFileIDFromName();
     }
 
     private int getFileIDFromID() {
         System.out.println("Introduce the file ID: ");
         int fileID = Integer.parseInt(readFromInput());
+
         if (isValidID(fileID)) {
             System.out.println("Downloading...");
+
             return fileID;
         }
+
         return invalidIDTreatment();
     }
 
@@ -191,9 +212,12 @@ public class Client implements ClientInterface{
 
     private int invalidIDTreatment() {
         System.out.println("Invalid ID. Try again (Yy/Nn)? ");
+
         if (isAnswerYes()) {
+
             return getFileIDFromID();
         }
+
         return -1;
     }
 
@@ -209,31 +233,49 @@ public class Client implements ClientInterface{
 
     private int getFileIDFromName() {
         System.out.println("Introduce the file name: ");
+
         String fileName = readFromInput();
         search(fileName);
+
         return Integer.parseInt(readFromInput());
     }
 
     private String readFromInput() {
         try {
+
             return readInput();
         } catch (IOException e) {
+
             return "";
         }
     }
 
+    private String[] getInfoUpload(){
+        String[] uploadInfo = new String[2];
+
+        System.out.println("Path of the file to upload");
+        uploadInfo[0] = readFromInput();
+
+        System.out.println("Add a Description to your file");
+        uploadInfo[1] = readFromInput();
+
+        return uploadInfo;
+    }
+
     @Override
-    public String upload(String content) {
+    public String upload(String contentPath, String description) {
         String uploadResponse = "";
+        String title = getTitleFromPath(contentPath);
+
         try{
-            File file = new File(content);
+            File file = new File(contentPath);
             byte buffer[] = new byte[(int)file.length()];
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
 
             input.read(buffer, 0, buffer.length);
             input.close();
 
-            uploadResponse = stub.uploadContent("title", "description", buffer, userName);
+            uploadResponse = stub.uploadContent(title, description, buffer, userName);
 
             System.out.println(uploadResponse);
 
@@ -244,6 +286,13 @@ public class Client implements ClientInterface{
             uploadResponse = "Something was wrong :S";
         }
         return uploadResponse;
+    }
+
+
+    private String getTitleFromPath(String contentPath){
+        String[] splitedPath = contentPath.split("/");
+
+        return splitedPath[splitedPath.length-1];
     }
 
     @Override
