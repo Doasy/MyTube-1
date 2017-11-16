@@ -80,7 +80,7 @@ public class XMLParser {
         List<Element> contentList  = classElement.getChildren();
 
         for (Element content : contentList){
-            if(content.getAttributeValue("id").equals(id)){
+            if(isId(id, content)){
                 return content.getChild("Title").getText();
             }
         }
@@ -100,5 +100,24 @@ public class XMLParser {
         }
 
         return contentList.get(contentList.size()-1).getAttributeValue("id");
+    }
+
+    public boolean userIsUploader(String user, String id){
+        List<Element> contentList = classElement.getChildren();
+
+        for (Element content : contentList) {
+            if(isId(id, content) && isUploader(user, content)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUploader(String user, Element content) {
+        return content.getChild("Uploader").getText().equals(user);
+    }
+
+    private boolean isId(String id, Element content) {
+        return content.getAttributeValue("id").equals(id);
     }
 }

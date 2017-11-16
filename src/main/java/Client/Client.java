@@ -167,8 +167,6 @@ public class Client implements ClientInterface{
             optionsMenu();
         }
 
-
-
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
