@@ -6,13 +6,6 @@ import java.util.List;
 
 public interface MyTubeInterface extends Remote {
 
-    /**
-     * Get a Content from key or null if not exist
-     *
-     * @param key key of the Content
-     * @return Content with specified key
-     * @throws RemoteException if can't make the petition to the Server
-     */
     String getContentFromKey(int key) throws RemoteException;
 
     String getContentFromTitle(String title) throws RemoteException;
@@ -32,22 +25,10 @@ public interface MyTubeInterface extends Remote {
     String deleteContent(String id, String userName) throws RemoteException;
 
     List<String> showOwnFiles(String userName) throws RemoteException;
-    /**
-     * Add a MyTubeCallback object into the callback objects lists
-     *
-     * @param callbackObject callbackObject to be added on callback list
-     * @throws RemoteException if can't make the petition to the Server
-     */
-   /* public void addCallback(MyTubeCallback callbackObject)
-            throws RemoteException;
-*/
-    /**
-     * Removes a MyTubeCallback object from the callback objects list
-     *
-     * @throws RemoteException if can't make the petition to the Server
-     */
-   /* public void removeCallback(MyTubeCallback callbackObject)
-            throws RemoteException;*/
+
+    void addCallback(MyTubeCallbackInterface callbackObject) throws RemoteException;
+
+    void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException;
 
     void exit() throws RemoteException;
 }

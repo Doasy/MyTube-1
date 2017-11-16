@@ -102,6 +102,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
+            notifyAllNewContent(title);
 
             response = "Successful upload!";
 
@@ -222,6 +223,31 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     public List<String> showOwnFiles(String userName) throws RemoteException {
         XMLParser xmlParser = new XMLParser();
         return xmlParser.XMLFindByUserName(userName);
+    }
+
+    @Override
+    public void addCallback(MyTubeCallbackInterface callbackObject)
+            throws RemoteException {
+        callbackObjects.add(callbackObject);
+        System.out.println("New client registered on callback list. (" + callbackObjects.size() + " clients)");
+    }
+
+    @Override
+    public void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException {
+        callbackObjects.remove(callbackObject);
+        System.out.println("A client have been unregistered "
+                + "from callback list. (" + callbackObjects.size() + " clients)");
+
+    }
+
+    private void notifyAllNewContent(String title) {
+        for (MyTubeCallbackInterface callback : callbackObjects) {
+            try {
+                callback.notifyNewContent(title);
+            } catch (RemoteException ex) {
+                System.err.println("Can not notify new content to all clients");
+            }
+        }
     }
 
 }

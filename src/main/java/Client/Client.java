@@ -1,5 +1,7 @@
 package Client;
 
+import InterfaceImplement.MyTubeCallbackImpl;
+import RemoteInterface.MyTubeCallbackInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.*;
@@ -18,6 +20,7 @@ public class Client implements ClientInterface{
     private Registry registry;
     private MyTubeInterface stub;
     private String userName;
+    private MyTubeCallbackInterface callbackObject;
 
     Client(String ip, int port, String userName){
         this.port = port;
@@ -30,6 +33,7 @@ public class Client implements ClientInterface{
 
     private static void optionsMenu(){
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
+                "0: Exit\n"+
                 "1: Upload\n"+
                 "2: Download\n" +
                 "3: List the digital available.\n" +
@@ -55,13 +59,21 @@ public class Client implements ClientInterface{
                 System.setSecurityManager(new SecurityManager());
             }
             registry = LocateRegistry.getRegistry(ip, port);
-            stub = (MyTubeInterface) registry.lookup("MyTube");
-            //callbackObject = new MyTubeCallbackImpl();
-            //stub.addCallback(callbackObject);
-            //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
+            stub = (MyTubeInterface) registry.lookup(rmi_name);
+            callbackObject = new MyTubeCallbackImpl();
+            stub.addCallback(callbackObject);
+            System.out.println("MyTube client connected on: "+  rmi_name);
         } catch (RemoteException ex) {
-            System.out.println("Can't connect to the server");
+            System.err.println("Can't connect to the server");
             System.exit(1);
+        }
+    }
+
+    public void disconnectFromTheServer() {
+        try {
+            stub.removeCallback(callbackObject);
+        } catch (Exception ex) {
+            System.err.println("Error disconnecting from the server");
         }
     }
 
@@ -131,7 +143,7 @@ public class Client implements ClientInterface{
             listToPrint.append(content).append("\n");
         }
 
-        System.out.println("The list of contents with keyword" + keyWord + "is:");
+        System.out.println("The list of contents with keyword " + keyWord + " is:");
         System.out.println(listToPrint);
     }
 
@@ -184,10 +196,10 @@ public class Client implements ClientInterface{
 
     private void downloadContentWithID(int contentID) {
         String home = System.getProperty("user.home");
-        System.out.println("Downloading...");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
+            System.out.println("Downloading in directory "+home + "/Downloads/" + title+"...");
 
             File file = new File(home + "/Downloads/" + title);
             file.getParentFile().mkdirs();
@@ -344,8 +356,12 @@ public class Client implements ClientInterface{
 
     @Override
     public void exit() {
+        System.out.print("Disconnecting from the server...");
+        disconnectFromTheServer();
         System.out.println("Thanks for using MyTube! ");
         System.out.println("See you soon ;) ");
         System.exit(0);
     }
+
+
 }
