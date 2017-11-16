@@ -210,4 +210,16 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         return xmlParser.XMLFindByUserName(userName);
     }
 
+    @Override
+    public void addCallback(MyTubeCallbackInterface callbackObject)
+            throws RemoteException {
+        callbackObjects.add(callbackObject);
+        System.out.println("New client registered on callback list. (" + callbackObjects.size() + " clients)");
+    }
+
+    @Override
+    public void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException {
+
+    }
+
 }
