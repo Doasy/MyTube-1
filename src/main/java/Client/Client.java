@@ -59,7 +59,7 @@ public class Client implements ClientInterface{
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
         } catch (RemoteException ex) {
-            System.out.println("Can not connect to the server");
+            System.out.println("Can't connect to the server");
             System.exit(1);
         }
     }
@@ -108,7 +108,7 @@ public class Client implements ClientInterface{
     }
 
     private static String registerIntoApp() throws IOException {
-        System.out.println("Hi! What's your nikname?");
+        System.out.println("Hi! What's your nickname?");
 
         return readInput();
     }
@@ -167,12 +167,17 @@ public class Client implements ClientInterface{
     }
 
     public void download() {
-        String home = System.getProperty("user.home");
         int contentID = getContentID();
         if (contentID == -1) {
             optionsMenu();
         }
+        else {
+            downloadContentWithID(contentID);
+        }
+    }
 
+    private void downloadContentWithID(int contentID) {
+        String home = System.getProperty("user.home");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
@@ -187,7 +192,6 @@ public class Client implements ClientInterface{
             output.flush();
             output.close();
         }catch(Exception e) {
-
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
@@ -317,6 +321,8 @@ public class Client implements ClientInterface{
 
     @Override
     public void exit() {
-        //TODO
+        System.out.println("Thanks for using MyTube! ");
+        System.out.println("See you soon ;) ");
+        System.exit(0);
     }
 }
