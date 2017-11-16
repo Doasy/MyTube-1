@@ -164,10 +164,8 @@ public class Client implements ClientInterface{
         List<String> contents = new ArrayList<>();
 
         try {
-
             contents = stub.searchAll();
         } catch (RemoteException e) {
-
             System.err.println("Problem searching files");
         }
 
