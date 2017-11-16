@@ -200,4 +200,9 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         return stdInput;
     }
 
+    private  List<String> showOwnFiles(String userName) throws RemoteException {
+        XMLParser xmlParser = new XMLParser();
+        return xmlParser.XMLFindByUserName(userName);
+    }
+
 }

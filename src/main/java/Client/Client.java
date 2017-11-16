@@ -34,8 +34,9 @@ public class Client implements ClientInterface{
                 "1: Upload\n"+
                 "2: Download\n" +
                 "3: List the digital available.\n" +
-                "4: Search\n" +
-                "5: DeleteContent");
+                "4: Search by keyWord\n" +
+                "5: Delete Content\n" +
+                "6: Update Content");
     }
 
     private static String readInput() throws IOException {
@@ -95,12 +96,15 @@ public class Client implements ClientInterface{
                         client.listAll();
                         break;
                     case 4:
-                        //TODO
-                        client.search(null);
+                        String keyword = client.readFromInput();
+                        client.search(keyword);
                         break;
                     case 5:
                         String id = client.readFromInput();
                         client.deleteContent(id);
+                        break;
+                    case 6:
+                        client.modifyContent();
                         break;
                 }
             }
@@ -327,5 +331,19 @@ public class Client implements ClientInterface{
         System.out.println("Thanks for using MyTube! ");
         System.out.println("See you soon ;) ");
         System.exit(0);
+    }
+
+    private void modifyContent() throws RemoteException {
+        List<String> userFiles = stub.showOwnFiles(userName);
+        if(userFiles.size() > 0){
+            System.out.println("Select the id from the file that will be modified");
+            for(String userFile: userFiles){
+                System.out.println();
+                String id = readFromInput();
+
+            }
+        }else{
+            System.out.println("You can't modify any files");
+        }
     }
 }
