@@ -161,7 +161,6 @@ public class Client implements ClientInterface{
     }
 
     public void download() {
-        String home = System.getProperty("user.home");
         int contentID = getContentID();
         if (contentID == -1) {
             optionsMenu();
@@ -173,6 +172,7 @@ public class Client implements ClientInterface{
     }
 
     private void downloadContentWithID(int contentID) {
+        String home = System.getProperty("user.home");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
