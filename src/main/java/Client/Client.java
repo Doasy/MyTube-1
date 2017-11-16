@@ -30,6 +30,7 @@ public class Client implements ClientInterface{
 
     private static void optionsMenu(){
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
+                "0: Exit\n"+
                 "1: Upload\n"+
                 "2: Download\n" +
                 "3: List the digital available.\n" +
@@ -76,30 +77,32 @@ public class Client implements ClientInterface{
             String userName = registerIntoApp();
             final Client client = new Client(args[0], Integer.parseInt(args[1]), userName);
             client.connectToTheServer();
-            optionsMenu();
-            option = Integer.parseInt(readInput());
-            switch (option){
-                case 0:
-                    client.exit();
-                    break;
-                case 1:
-                    fileInfo = client.getInfoUpload();
-                    client.upload(fileInfo[0], fileInfo[1]);
-                    break;
-                case 2:
-                    client.download();
-                    break;
-                case 3:
-                    client.listAll();
-                    break;
-                case 4:
-                    //TODO
-                    client.search(null);
-                    break;
-                case 5:
-                    String id = client.readFromInput();
-                    client.deleteContent(id);
-                    break;
+            while(true) {
+                optionsMenu();
+                option = Integer.parseInt(readInput());
+                switch (option) {
+                    case 0:
+                        client.exit();
+                        break;
+                    case 1:
+                        fileInfo = client.getInfoUpload();
+                        client.upload(fileInfo[0], fileInfo[1]);
+                        break;
+                    case 2:
+                        client.download();
+                        break;
+                    case 3:
+                        client.listAll();
+                        break;
+                    case 4:
+                        //TODO
+                        client.search(null);
+                        break;
+                    case 5:
+                        String id = client.readFromInput();
+                        client.deleteContent(id);
+                        break;
+                }
             }
         }
         catch (Exception e) {
