@@ -122,6 +122,20 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
+    public String modifyContent(String id, String title, String description) throws RemoteException{
+        String path;
+        try {
+            return xmlcreator.updateElement(id, title, description);
+
+        } catch (Exception e) {
+            System.out.println("FileImpl " + e.getMessage());
+            e.printStackTrace();
+            return "Problem modifyig content";
+        }
+
+    }
+
+    @Override
     public String deleteContent(String id, String userName) throws RemoteException {
         XMLParser xmlParser = new XMLParser();
         try {

@@ -322,13 +322,20 @@ public class Client implements ClientInterface{
     }
 
     public void modifyContent() throws RemoteException {
+        String modifyResponse = "";
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
             System.out.println("Select the id from the file that will be modified");
             for(String userFile: userFiles){
                 System.out.println();
                 String id = readFromInput();
+                System.out.println("Write a new title: ");
+                String title = readFromInput();
+                String description = readFromInput();
+                System.out.println("Write a new description: ");
+                modifyResponse = stub.modifyContent(id, title, description);
 
+                System.out.println(modifyResponse);
             }
         }else{
             System.out.println("You can't modify any files");

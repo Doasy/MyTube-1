@@ -60,6 +60,27 @@ public class XMLCreator {
         }
     }
 
+    public String updateElement(String id, String contentTitle, String contentDescription) throws TransformerException {
+        Node content = document.getFirstChild();
+        NodeList contentList = content.getChildNodes();
+        XMLParser xmlParser = new XMLParser();
+
+        for (int temp = 0; temp < contentList.getLength(); temp++) {
+            Node childNode = contentList.item(temp);
+            if(isEquals(id, childNode)){
+                NamedNodeMap attributes = childNode.getAttributes();
+                Node title = attributes.getNamedItem("Title");
+                title.setTextContent(contentTitle);
+                Node description = attributes.getNamedItem("Description");
+                description.setTextContent(contentDescription);
+            }
+        }
+
+        writeXML();
+
+        return "Element Modified Correctly";
+    }
+
     private Element addContent(String id) {
         Element content = document.createElement("Content");
         this.classElement.appendChild(content);
