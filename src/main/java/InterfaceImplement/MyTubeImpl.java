@@ -1,5 +1,6 @@
 package InterfaceImplement;
 
+import RemoteInterface.MyTubeCallbackInterface;
 import RemoteInterface.MyTubeInterface;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
@@ -13,16 +14,20 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
+    Set<MyTubeCallbackInterface> callbackObjects;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
         xmlcreator = new XMLCreator();
+        callbackObjects = new HashSet<MyTubeCallbackInterface>();
     }
 
     @Override
