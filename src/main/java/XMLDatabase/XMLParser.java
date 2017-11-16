@@ -6,6 +6,11 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +70,25 @@ public class XMLParser {
         return listOfTitles;
     }
 
+    public List<String> XMLFindByUserName(String userName){
+        List<Element> contentList = classElement.getChildren();
+        List<String> listOfTitles = new ArrayList<>();
+        String contentText;
+
+        for (Element content : contentList) {
+            String title = content.getChild("Uploader").getText();
+
+            if(title.contains(userName)){
+                contentText = "ID: " + content.getAttributeValue("id") +
+                        " Title: " + content.getChild("Title").getText() +
+                        " Description: " + content.getChild("Description").getText() +
+                        " Uploader: " + content.getChild("Uploader").getText();
+                listOfTitles.add(contentText);
+            }
+        }
+        return listOfTitles;
+    }
+
     public int XMLFindIdByTitle(String title){
         List<Element> contentList = classElement.getChildren();
 
@@ -86,6 +110,8 @@ public class XMLParser {
         }
         return "";
     }
+
+
 
     public boolean idExists(String id){
         String response = getNameById(id);
@@ -120,4 +146,6 @@ public class XMLParser {
     private boolean isId(String id, Element content) {
         return content.getAttributeValue("id").equals(id);
     }
+
+
 }

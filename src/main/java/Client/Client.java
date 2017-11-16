@@ -32,7 +32,10 @@ public class Client implements ClientInterface{
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
                 "1: Upload\n"+
                 "2: Download\n" +
-                "3: List the digital content available.");
+                "3: List the digital available.\n" +
+                "4: Search by keyWord\n" +
+                "5: Delete Content\n" +
+                "6: Update Content");
     }
 
     private static String readInput() throws IOException {
@@ -74,29 +77,35 @@ public class Client implements ClientInterface{
             String userName = registerIntoApp();
             final Client client = new Client(args[0], Integer.parseInt(args[1]), userName);
             client.connectToTheServer();
-            optionsMenu();
-            option = Integer.parseInt(readInput());
-            switch (option){
-                case 0:
-                    client.exit();
-                    break;
-                case 1:
-                    fileInfo = client.getInfoUpload();
-                    client.upload(fileInfo[0], fileInfo[1]);
-                    break;
-                case 2:
-                    client.download();
-                    break;
-                case 3:
-                    client.listAll();
-                    break;
-                case 4:
-                    //TODO
-                    client.search(null);
-                    break;
-                case 5:
-                    client.update();
-                    break;
+            while(true) {
+                optionsMenu();
+                option = Integer.parseInt(readInput());
+                switch (option) {
+                    case 0:
+                        client.exit();
+                        break;
+                    case 1:
+                        fileInfo = client.getInfoUpload();
+                        client.upload(fileInfo[0], fileInfo[1]);
+                        break;
+                    case 2:
+                        client.download();
+                        break;
+                    case 3:
+                        client.listAll();
+                        break;
+                    case 4:
+                        String keyword = client.readFromInput();
+                        client.search(keyword);
+                        break;
+                    case 5:
+                        String id = client.readFromInput();
+                        client.deleteContent(id);
+                        break;
+                    case 6:
+                        client.modifyContent();
+                        break;
+                }
             }
         }
         catch (Exception e) {
@@ -175,7 +184,6 @@ public class Client implements ClientInterface{
 
     private void downloadContentWithID(int contentID) {
         String home = System.getProperty("user.home");
-        System.out.println("Downloading...");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
@@ -199,19 +207,23 @@ public class Client implements ClientInterface{
         System.out.println("Do you know the file ID (Yy/Nn)?  ");
 
         if (isAnswerYes()) {
-            return fileIDTreatment();
+
+            return getFileIDFromID();
         }
 
         return getFileIDFromName();
     }
 
-    private int fileIDTreatment() {
+    private int getFileIDFromID() {
         System.out.println("Introduce the file ID: ");
         int fileID = Integer.parseInt(readFromInput());
 
         if (isValidID(fileID)) {
+            System.out.println("Downloading...");
+
             return fileID;
         }
+
         return invalidIDTreatment();
     }
 
@@ -224,7 +236,8 @@ public class Client implements ClientInterface{
         System.out.println("Invalid ID. Try again (Yy/Nn)? ");
 
         if (isAnswerYes()) {
-            return fileIDTreatment();
+
+            return getFileIDFromID();
         }
 
         return -1;
@@ -304,6 +317,14 @@ public class Client implements ClientInterface{
         return splitedPath[splitedPath.length-1];
     }
 
+    private void deleteContent(String id){
+        try {
+            System.out.println(stub.deleteContent(id, userName));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update() {
         System.out.println("Which of your files would you like to update?");
 
@@ -314,5 +335,19 @@ public class Client implements ClientInterface{
         System.out.println("Thanks for using MyTube! ");
         System.out.println("See you soon ;) ");
         System.exit(0);
+    }
+
+    private void modifyContent() throws RemoteException {
+        List<String> userFiles = stub.showOwnFiles(userName);
+        if(userFiles.size() > 0){
+            System.out.println("Select the id from the file that will be modified");
+            for(String userFile: userFiles){
+                System.out.println();
+                String id = readFromInput();
+
+            }
+        }else{
+            System.out.println("You can't modify any files");
+        }
     }
 }
