@@ -219,6 +219,9 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException {
+        callbackObjects.remove(callbackObject);
+        System.out.println("A client have been unregistered "
+                + "from callback list. (" + callbackObjects.size() + " clients)");
 
     }
 
