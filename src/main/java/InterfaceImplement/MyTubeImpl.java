@@ -225,4 +225,14 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     }
 
+    private void notifyAllNewContent(String title) {
+        for (MyTubeCallbackInterface callback : callbackObjects) {
+            try {
+                callback.notifyNewContent(title);
+            } catch (RemoteException ex) {
+                System.err.println("Can not notify new content to all clients");
+            }
+        }
+    }
+
 }
