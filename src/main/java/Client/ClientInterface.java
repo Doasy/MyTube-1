@@ -1,8 +1,9 @@
 package Client;
 
-import java.util.List;
+import java.rmi.RemoteException;
 
 public interface ClientInterface {
+
     void search(String keyWord);
 
     void listAll();
@@ -10,6 +11,10 @@ public interface ClientInterface {
     void download();
 
     String upload(String contentPath, String description);
+
+    void deleteContent(String id);
+
+    void modifyContent() throws RemoteException;
 
     void exit();
 }
