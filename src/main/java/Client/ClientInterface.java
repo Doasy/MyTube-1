@@ -12,6 +12,4 @@ public interface ClientInterface {
     String upload(String contentPath, String description);
 
     void exit();
-
-    void update();
 }

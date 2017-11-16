@@ -184,6 +184,7 @@ public class Client implements ClientInterface{
 
     private void downloadContentWithID(int contentID) {
         String home = System.getProperty("user.home");
+        System.out.println("Downloading...");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
@@ -207,23 +208,19 @@ public class Client implements ClientInterface{
         System.out.println("Do you know the file ID (Yy/Nn)?  ");
 
         if (isAnswerYes()) {
-
-            return getFileIDFromID();
+            return fileIDTreatment();
         }
 
         return getFileIDFromName();
     }
 
-    private int getFileIDFromID() {
+    private int fileIDTreatment() {
         System.out.println("Introduce the file ID: ");
         int fileID = Integer.parseInt(readFromInput());
 
         if (isValidID(fileID)) {
-            System.out.println("Downloading...");
-
             return fileID;
         }
-
         return invalidIDTreatment();
     }
 
@@ -236,8 +233,7 @@ public class Client implements ClientInterface{
         System.out.println("Invalid ID. Try again (Yy/Nn)? ");
 
         if (isAnswerYes()) {
-
-            return getFileIDFromID();
+            return fileIDTreatment();
         }
 
         return -1;
@@ -325,18 +321,6 @@ public class Client implements ClientInterface{
         }
     }
 
-    public void update() {
-        System.out.println("Which of your files would you like to update?");
-
-    }
-
-    @Override
-    public void exit() {
-        System.out.println("Thanks for using MyTube! ");
-        System.out.println("See you soon ;) ");
-        System.exit(0);
-    }
-
     private void modifyContent() throws RemoteException {
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
@@ -349,5 +333,12 @@ public class Client implements ClientInterface{
         }else{
             System.out.println("You can't modify any files");
         }
+    }
+
+    @Override
+    public void exit() {
+        System.out.println("Thanks for using MyTube! ");
+        System.out.println("See you soon ;) ");
+        System.exit(0);
     }
 }
