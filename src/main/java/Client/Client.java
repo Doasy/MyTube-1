@@ -1,5 +1,7 @@
 package Client;
 
+import InterfaceImplement.MyTubeCallbackImpl;
+import RemoteInterface.MyTubeCallbackInterface;
 import RemoteInterface.MyTubeInterface;
 
 import java.io.*;
@@ -18,6 +20,7 @@ public class Client implements ClientInterface{
     private Registry registry;
     private MyTubeInterface stub;
     private String userName;
+    private MyTubeCallbackInterface callbackObject;
 
     Client(String ip, int port, String userName){
         this.port = port;
@@ -55,10 +58,10 @@ public class Client implements ClientInterface{
                 System.setSecurityManager(new SecurityManager());
             }
             registry = LocateRegistry.getRegistry(ip, port);
-            stub = (MyTubeInterface) registry.lookup("MyTube");
-            //callbackObject = new MyTubeCallbackImpl();
-            //stub.addCallback(callbackObject);
-            //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
+            stub = (MyTubeInterface) registry.lookup(rmi_name);
+            callbackObject = new MyTubeCallbackImpl();
+            stub.addCallback(callbackObject);
+            System.out.println("MyTube client connected on: "+  rmi_name);
         } catch (RemoteException ex) {
             System.out.println("Can't connect to the server");
             System.exit(1);
@@ -341,4 +344,6 @@ public class Client implements ClientInterface{
         System.out.println("See you soon ;) ");
         System.exit(0);
     }
+
+
 }
