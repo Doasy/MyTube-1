@@ -348,6 +348,8 @@ public class Client implements ClientInterface{
 
     @Override
     public void exit() {
+        System.out.print("Disconnecting from the server...");
+        disconnectFromTheServer();
         System.out.println("Thanks for using MyTube! ");
         System.out.println("See you soon ;) ");
         System.exit(0);
