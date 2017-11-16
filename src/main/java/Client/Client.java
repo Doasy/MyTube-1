@@ -63,8 +63,16 @@ public class Client implements ClientInterface{
             stub.addCallback(callbackObject);
             System.out.println("MyTube client connected on: "+  rmi_name);
         } catch (RemoteException ex) {
-            System.out.println("Can't connect to the server");
+            System.err.println("Can't connect to the server");
             System.exit(1);
+        }
+    }
+
+    public void disconnectFromTheServer() {
+        try {
+            stub.removeCallback(callbackObject);
+        } catch (Exception ex) {
+            System.err.println("Error disconnecting from the server");
         }
     }
 
