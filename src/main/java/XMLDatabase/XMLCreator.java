@@ -1,21 +1,19 @@
 package XMLDatabase;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class XMLCreator {
     private String filename = "./server01/Contents.xml";
@@ -69,6 +67,27 @@ public class XMLCreator {
         attr.setValue(id);
         content.setAttributeNode(attr);
         return content;
+    }
+
+    public String deleteElement(String user, String id) throws TransformerException {
+        Node content = document.getFirstChild();
+        NodeList contentList = content.getChildNodes();
+        XMLParser xmlParser = new XMLParser();
+
+        for (int temp = 0; temp < contentList.getLength(); temp++) {
+            Node childNode = contentList.item(temp);
+            if(isEquals(id, childNode) && xmlParser.userIsUploader(user, id)){
+                content.removeChild(childNode);
+            }
+        }
+
+        writeXML();
+
+        return "Element Deleted Correctly";
+    }
+
+    private boolean isEquals(String id, Node childNode) {
+        return childNode.getAttributes().item(0).getNodeValue().equals(id);
     }
 
     private void writeXML() throws TransformerException {
