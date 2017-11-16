@@ -102,6 +102,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
+            notifyAllNewContent(title);
 
             response = "Successful upload!";
 
