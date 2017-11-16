@@ -168,7 +168,6 @@ public class Client implements ClientInterface{
         else {
             downloadContentWithID(contentID);
         }
-
     }
 
     private void downloadContentWithID(int contentID) {
@@ -308,6 +307,8 @@ public class Client implements ClientInterface{
 
     @Override
     public void exit() {
-        //TODO
+        System.out.println("Thanks for using MyTube! ");
+        System.out.println("See you soon ;) ");
+        System.exit(0);
     }
 }
