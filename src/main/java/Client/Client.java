@@ -35,7 +35,7 @@ public class Client implements ClientInterface{
                 "3: List the digital available.\n" +
                 "4: Search by keyWord\n" +
                 "5: Delete Content\n" +
-                "6: Update Content");
+                "6: Modify Content");
     }
 
     private static String readInput() throws IOException {
@@ -95,10 +95,12 @@ public class Client implements ClientInterface{
                         client.listAll();
                         break;
                     case 4:
+                        System.out.println("Enter a keyword to search for content: ");
                         String keyword = client.readFromInput();
                         client.search(keyword);
                         break;
                     case 5:
+                        System.out.println("Enter the ID of the file you want to delete: ");
                         String id = client.readFromInput();
                         client.deleteContent(id);
                         break;
@@ -311,7 +313,7 @@ public class Client implements ClientInterface{
         return splitedPath[splitedPath.length-1];
     }
 
-    private void deleteContent(String id){
+    public void deleteContent(String id){
         try {
             System.out.println(stub.deleteContent(id, userName));
         } catch (RemoteException e) {
@@ -319,7 +321,7 @@ public class Client implements ClientInterface{
         }
     }
 
-    private void modifyContent() throws RemoteException {
+    public void modifyContent() throws RemoteException {
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
             System.out.println("Select the id from the file that will be modified");
