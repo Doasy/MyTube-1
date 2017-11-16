@@ -166,7 +166,13 @@ public class Client implements ClientInterface{
         if (contentID == -1) {
             optionsMenu();
         }
+        else {
+            downloadContentWithID(contentID);
+        }
 
+    }
+
+    private void downloadContentWithID(int contentID) {
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
@@ -181,7 +187,6 @@ public class Client implements ClientInterface{
             output.flush();
             output.close();
         }catch(Exception e) {
-
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
