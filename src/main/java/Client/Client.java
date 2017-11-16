@@ -33,6 +33,7 @@ public class Client implements ClientInterface{
 
     private static void optionsMenu(){
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
+                "0: Exit\n"+
                 "1: Upload\n"+
                 "2: Download\n" +
                 "3: List the digital available.\n" +
@@ -142,7 +143,7 @@ public class Client implements ClientInterface{
             listToPrint.append(content).append("\n");
         }
 
-        System.out.println("The list of contents with keyword" + keyWord + "is:");
+        System.out.println("The list of contents with keyword " + keyWord + " is:");
         System.out.println(listToPrint);
     }
 
@@ -195,10 +196,10 @@ public class Client implements ClientInterface{
 
     private void downloadContentWithID(int contentID) {
         String home = System.getProperty("user.home");
-        System.out.println("Downloading...");
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
+            System.out.println("Downloading in directory "+home + "/Downloads/" + title+"...");
 
             File file = new File(home + "/Downloads/" + title);
             file.getParentFile().mkdirs();
