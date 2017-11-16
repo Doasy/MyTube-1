@@ -32,7 +32,7 @@ public class Client implements ClientInterface{
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
                 "1: Upload\n"+
                 "2: Download\n" +
-                "3: List the digital available.");
+                "3: List the digital content available.");
     }
 
     private static String readInput() throws IOException {
@@ -57,7 +57,7 @@ public class Client implements ClientInterface{
             //stub.addCallback(callbackObject);
             //ColoredString.printlnSuccess("MyTube client connected on: "+  registryURL);
         } catch (RemoteException ex) {
-            System.out.println("Can not connect to the server");
+            System.out.println("Can't connect to the server");
             System.exit(1);
         }
     }
@@ -102,7 +102,7 @@ public class Client implements ClientInterface{
     }
 
     private static String registerIntoApp() throws IOException {
-        System.out.println("Hi! What's your nikname?");
+        System.out.println("Hi! What's your nickname?");
 
         return readInput();
     }
