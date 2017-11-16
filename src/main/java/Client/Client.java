@@ -32,7 +32,9 @@ public class Client implements ClientInterface{
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
                 "1: Upload\n"+
                 "2: Download\n" +
-                "3: List the digital available.");
+                "3: List the digital available.\n" +
+                "4: Search\n" +
+                "5: DeleteContent");
     }
 
     private static String readInput() throws IOException {
@@ -93,6 +95,10 @@ public class Client implements ClientInterface{
                 case 4:
                     //TODO
                     client.search(null);
+                    break;
+                case 5:
+                    String id = client.readFromInput();
+                    client.deleteContent(id);
                     break;
             }
         }
@@ -299,6 +305,14 @@ public class Client implements ClientInterface{
         String[] splitedPath = contentPath.split("/");
 
         return splitedPath[splitedPath.length-1];
+    }
+
+    private void deleteContent(String id){
+        try {
+            System.out.println(stub.deleteContent(id, userName));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

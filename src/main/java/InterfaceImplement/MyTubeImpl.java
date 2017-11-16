@@ -7,6 +7,7 @@ import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -113,6 +114,22 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         xmlcreator.addElement(hash, title, description, userName);
 
         return response;
+    }
+
+    @Override
+    public String deleteContent(String id, String userName) throws RemoteException {
+        XMLParser xmlParser = new XMLParser();
+        try {
+            if(xmlParser.userIsUploader(userName, id)){
+                makeALinuxCall("rm -r ./server01/" + id);
+                return xmlcreator.deleteElement(userName, id);
+            }else{
+                return "Sorry, this file isn't yours.";
+            }
+        }catch(TransformerException ex){
+            ex.printStackTrace();
+            return "There has been a problem deleting the content.";
+        }
     }
 
     @Override
