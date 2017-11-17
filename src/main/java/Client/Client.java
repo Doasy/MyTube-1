@@ -112,9 +112,7 @@ public class Client implements ClientInterface{
                         client.search(keyword);
                         break;
                     case 5:
-                        System.out.println("Enter the ID of the file you want to delete: ");
-                        String id = client.readFromInput();
-                        client.deleteContent(id);
+                        client.deleteContent();
                         break;
                     case 6:
                         client.modifyContent();
@@ -327,9 +325,18 @@ public class Client implements ClientInterface{
         return splitedPath[splitedPath.length-1];
     }
 
-    public void deleteContent(String id){
+    public void deleteContent(){
         try {
-            System.out.println(stub.deleteContent(id, userName));
+            List<String> userFiles = stub.showOwnFiles(userName);
+            if(userFiles.size() > 0) {
+                printLists(userFiles);
+
+                System.out.println("Select the id from the file that will be modified.");
+                String id = readFromInput();
+                System.out.println(stub.deleteContent(id, userName));
+            }else{
+                System.out.println("You can't modify any files");
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }

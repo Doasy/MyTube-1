@@ -12,7 +12,7 @@ public interface ClientInterface {
 
     String upload(String contentPath, String description);
 
-    void deleteContent(String id);
+    void deleteContent();
 
     void modifyContent() throws RemoteException;
 
