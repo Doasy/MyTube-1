@@ -119,6 +119,8 @@ public class Client implements ClientInterface{
                     case 6:
                         client.modifyContent();
                         break;
+                    default:
+                        System.out.println("Incorrect Option.");
                 }
             }
         }
@@ -337,18 +339,17 @@ public class Client implements ClientInterface{
         String modifyResponse = "";
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
-            System.out.println("Select the id from the file that will be modified");
-            for(String userFile: userFiles){
-                System.out.println();
-                String id = readFromInput();
-                System.out.println("Write a new title: ");
-                String title = readFromInput();
-                String description = readFromInput();
-                System.out.println("Write a new description: ");
-                modifyResponse = stub.modifyContent(id, title, description);
+            printLists(userFiles);
 
-                System.out.println(modifyResponse);
-            }
+            System.out.println("Select the id from the file that will be modified.");
+            String id = readFromInput();
+            System.out.println("Write a new title: ");
+            String title = readFromInput();
+            System.out.println("Write a new description: ");
+            String description = readFromInput();
+            modifyResponse = stub.modifyContent(id, title, description);
+
+            System.out.println(modifyResponse);
         }else{
             System.out.println("You can't modify any files");
         }
@@ -363,5 +364,11 @@ public class Client implements ClientInterface{
         System.exit(0);
     }
 
+
+    private void printLists(List<String> listToPrint){
+        for(String string: listToPrint){
+            System.out.println(string);
+        }
+    }
 
 }

@@ -13,7 +13,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class XMLCreator {
     private String filename = "./server01/Contents.xml";
@@ -63,16 +62,19 @@ public class XMLCreator {
     public String updateElement(String id, String contentTitle, String contentDescription) throws TransformerException {
         Node content = document.getFirstChild();
         NodeList contentList = content.getChildNodes();
-        XMLParser xmlParser = new XMLParser();
 
         for (int temp = 0; temp < contentList.getLength(); temp++) {
             Node childNode = contentList.item(temp);
             if(isEquals(id, childNode)){
-                NamedNodeMap attributes = childNode.getAttributes();
-                Node title = attributes.getNamedItem("Title");
-                title.setTextContent(contentTitle);
-                Node description = attributes.getNamedItem("Description");
-                description.setTextContent(contentDescription);
+                NodeList list = childNode.getChildNodes();
+                for(int i = 0; i < list.getLength(); i++) {
+                    Node node = list.item(i);
+                    if ("Title".equals(node.getNodeName())) {
+                        node.setTextContent(contentTitle);
+                    } else if ("Description".equals(node.getNodeName())) {
+                        node.setTextContent(contentDescription);
+                    }
+                }
             }
         }
 

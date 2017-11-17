@@ -124,16 +124,17 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public String modifyContent(String id, String title, String description) throws RemoteException{
-        String path;
         try {
+            String actualTitle = readSystemCallAsString(makeALinuxCall("ls ./server01/" + id));
+            String oldTitle = "./server01/" + id + "/" + actualTitle;
+            String newTitle = "./server01/" + id + "/" + title;
+            makeALinuxCall("mv " + oldTitle + " " + newTitle);
             return xmlcreator.updateElement(id, title, description);
-
         } catch (Exception e) {
             System.out.println("FileImpl " + e.getMessage());
             e.printStackTrace();
             return "Problem modifyig content";
         }
-
     }
 
     @Override
@@ -217,6 +218,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(p.getErrorStream()));
+
         return stdInput;
     }
 
