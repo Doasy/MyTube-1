@@ -26,7 +26,7 @@ public class Server {
      * @param port port where the server listens for client petitions
      * @param registryName name of the registered service on RMI Registry
      */
-    public Server(String host, int port, String registryName) throws IOException {
+    private Server(String host, int port, String registryName) throws IOException {
         this.host = host;
         this.port = port;
         this.registryName = registryName;
@@ -93,7 +93,7 @@ public class Server {
     /**
      * Runs the Server
      */
-    public void runServer() {
+    private void runServer() {
         try {
             System.setProperty("java.rmi.server.hostname", host);
             System.setProperty("java.security.policy", "security.policy");
@@ -112,7 +112,7 @@ public class Server {
     /**
      * Stopps the Server
      */
-    public void stopServer() throws RemoteException {
+    private void stopServer() throws RemoteException {
         if (stub != null) {
             stub.exit();
         }
