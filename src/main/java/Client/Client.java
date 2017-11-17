@@ -325,6 +325,7 @@ public class Client implements ClientInterface{
         return splitedPath[splitedPath.length-1];
     }
 
+    @Override
     public void deleteContent(){
         try {
             List<String> userFiles = stub.showOwnFiles(userName);
@@ -342,6 +343,7 @@ public class Client implements ClientInterface{
         }
     }
 
+    @Override
     public void modifyContent() throws RemoteException {
         String modifyResponse = "";
         List<String> userFiles = stub.showOwnFiles(userName);

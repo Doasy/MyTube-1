@@ -92,14 +92,13 @@ public class XMLCreator {
         return content;
     }
 
-    public String deleteElement(String user, String id) throws TransformerException {
+    public String deleteElement(String id) throws TransformerException {
         Node content = document.getFirstChild();
         NodeList contentList = content.getChildNodes();
-        XMLParser xmlParser = new XMLParser();
 
         for (int temp = 0; temp < contentList.getLength(); temp++) {
             Node childNode = contentList.item(temp);
-            if(isEquals(id, childNode) && xmlParser.userIsUploader(user, id)){
+            if(isEquals(id, childNode)){
                 content.removeChild(childNode);
             }
         }

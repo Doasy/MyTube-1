@@ -143,7 +143,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         try {
             if(xmlParser.userIsUploader(userName, id)){
                 makeALinuxCall("rm -r ./server01/" + id);
-                return xmlcreator.deleteElement(userName, id);
+                return xmlcreator.deleteElement(id);
             }else{
                 return "Sorry, this file isn't yours.";
             }
