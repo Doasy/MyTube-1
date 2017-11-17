@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static InterfaceImplement.MyTubeLinuxCalls.makeALinuxCall;
+import static InterfaceImplement.MyTubeLinuxCalls.readSystemCallAsString;
+
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
-    private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
-    Set<MyTubeCallbackInterface> callbackObjects;
+    private Set<MyTubeCallbackInterface> callbackObjects;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -181,46 +183,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         //TODO
     }
 
-    private Process makeALinuxCall(String command) {
-        Process p = null;
-        try {
-            p = Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p;
-    }
 
-    private String readSystemCallAsString(Process p) throws IOException {
-        String response = "";
-        String line;
-
-        BufferedReader stdInput = readSystemCall(p);
-        while ((line = stdInput.readLine()) != null) {
-            response += line;
-        }
-        return response;
-    }
-
-    private List<String> readSystemCallAsList(Process p) throws IOException {
-        List<String> response = new ArrayList<>();
-        String line = "";
-        BufferedReader stdInput = readSystemCall(p);
-        while ((line = stdInput.readLine()) != null) {
-            response.add(line);
-        }
-        return response;
-    }
-
-    private BufferedReader readSystemCall(Process p) {
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(p.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(p.getErrorStream()));
-
-        return stdInput;
-    }
 
     public List<String> showOwnFiles(String userName) throws RemoteException {
         XMLParser xmlParser = new XMLParser();
