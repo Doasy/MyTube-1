@@ -176,11 +176,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         }
     }
 
-    @Override
-    public void exit() throws RemoteException {
-        //TODO
-    }
-
     private Process makeALinuxCall(String command) {
         Process p = null;
         try {

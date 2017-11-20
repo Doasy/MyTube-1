@@ -1,10 +1,11 @@
 package Server;
 
 import InterfaceImplement.MyTubeImpl;
+import Server_SuperServer_Utilities.Utilities;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.net.UnknownHostException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -76,7 +77,7 @@ public class Server {
                     System.out.println("Can not finalize main process");
                 }
                 try {
-                    s.stopServer();
+                    stopServer(s.getRegistry(), registryName, s.getStub());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -88,33 +89,10 @@ public class Server {
     }
 
     /**
-     * Runs the Server
-     */
-    public void runServer() {
-        try {
-            System.setProperty("java.rmi.server.hostname", host);
-            System.setProperty("java.security.policy", "security.policy");
-            if (System.getSecurityManager() == null) {
-                System.setSecurityManager(new SecurityManager());
-            }
-            stub = new MyTubeImpl();
-            registry = getRegistry();
-            registry.rebind(registryName, stub);
-            System.out.println("MyTube Server ready on: " + registryURL);
-        } catch (Exception ex) {
-            System.err.println("Server error: " + ex.toString());
-        }
-        while(true){}
-    }
-
-    /**
      * Stopps the Server
      */
-    public void stopServer() throws RemoteException {
-        if (stub != null) {
-            stub.exit();
-        }
-        try {
+    private static void stopServer(Registry registry, String registryName, MyTubeImpl stub) throws RemoteException {
+        try{
             registry.unbind(registryName);
             UnicastRemoteObject.unexportObject(stub, true);
             System.out.println("Server stopped correctly");
@@ -123,16 +101,31 @@ public class Server {
         }
     }
 
-    private Registry getRegistry() throws RemoteException {
-        Registry reg;
+    /**
+     * Runs the Server
+     */
+    private void runServer() {
         try {
-            reg = LocateRegistry.createRegistry(port);
-            System.out.println("RMI registry created at port " + port);
-        } catch (RemoteException ex) {
-            reg = LocateRegistry.getRegistry(host, port);
-            System.err.println("RMI registry is already created on port "
-                    + port);
+            System.setProperty("java.rmi.server.hostname", host);
+            System.setProperty("java.security.policy", "security.policy");
+            if (System.getSecurityManager() == null) {
+                System.setSecurityManager(new SecurityManager());
+            }
+            stub = new MyTubeImpl();
+            registry = Utilities.getRegistry(host, port);
+            registry.rebind(registryName, stub);
+            System.out.println("MyTube Server ready on: " + registryURL);
+        } catch (Exception ex) {
+            System.err.println("Server error: " + ex.toString());
         }
-        return reg;
     }
+
+    private Registry getRegistry(){
+        return this.registry;
+    }
+
+    private MyTubeImpl getStub(){
+        return this.stub;
+    }
+
 }
