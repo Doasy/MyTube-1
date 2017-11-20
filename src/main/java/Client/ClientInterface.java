@@ -8,7 +8,7 @@ public interface ClientInterface {
 
     void listAll();
 
-    void download();
+    void download() throws RemoteException;
 
     String upload(String contentPath, String description);
 

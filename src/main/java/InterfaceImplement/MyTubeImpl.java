@@ -29,7 +29,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         super();
         xmlcreator = new XMLCreator();
         xmlParser = new XMLParser();
-        callbackObjects = new HashSet<MyTubeCallbackInterface>();
+        callbackObjects = new HashSet<>();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
-    public boolean isValidID(int ID){
+    public boolean isValidID(int ID) throws RemoteException{
         return xmlParser.idExists(String.valueOf(ID));
     }
 

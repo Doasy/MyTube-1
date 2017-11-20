@@ -32,5 +32,5 @@ public interface MyTubeInterface extends Remote {
 
     void exit() throws RemoteException;
 
-    boolean isValidID(int ID);
+    boolean isValidID(int ID) throws RemoteException;
 }
