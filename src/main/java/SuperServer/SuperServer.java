@@ -6,7 +6,7 @@ import static java.lang.System.exit;
 
 
 public class SuperServer {
-    private static final String IDENTIFIER = "NODE ";
+    private static final String IDENTIFIER = "SUPERSERVER";
 
 
     private static void startMessage(){
