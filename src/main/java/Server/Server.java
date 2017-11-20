@@ -1,11 +1,10 @@
 package Server;
 
 import InterfaceImplement.MyTubeImpl;
-import XMLDatabase.XMLCreator;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.net.UnknownHostException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,6 +17,16 @@ public class Server {
     private final int port;
     private final String registryName;
     private final String registryURL;
+
+
+    /***
+     * In charge of starting the thread.
+     * @throws UnknownHostException
+     */
+    private static void threadLauncher() throws UnknownHostException {
+        Thread theThread = new Thread();
+        theThread.start();
+    }
 
     /**
      * Creates a Server instance
@@ -42,10 +51,6 @@ public class Server {
      */
     private void createDirectory() throws IOException {
         Process p = Runtime.getRuntime().exec("mkdir ./server01");
-
-        //p = Runtime.getRuntime().exec("ls");
-
-        //readSystemCall(p);
     }
 
 
@@ -79,15 +84,8 @@ public class Server {
                 System.exit(0);
             }
         });
-
-        try{
-            XMLCreator xmlCreator = new XMLCreator();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-
         s.runServer();
-
+        threadLauncher();
     }
 
     /**
@@ -107,6 +105,7 @@ public class Server {
         } catch (Exception ex) {
             System.err.println("Server error: " + ex.toString());
         }
+        while(true){}
     }
 
     /**

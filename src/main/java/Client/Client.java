@@ -18,7 +18,6 @@ public class Client implements ClientInterface{
     private String ip;
     private String rmi_url;
     private String rmi_name;
-    private Registry registry;
     private MyTubeInterface stub;
     private String userName;
     private MyTubeCallbackInterface callbackObject;
@@ -59,7 +58,7 @@ public class Client implements ClientInterface{
             if (System.getSecurityManager() == null) {
                 System.setSecurityManager(new SecurityManager());
             }
-            registry = LocateRegistry.getRegistry(ip, port);
+            Registry registry = LocateRegistry.getRegistry(ip, port);
             stub = (MyTubeInterface) registry.lookup(rmi_name);
             callbackObject = new MyTubeCallbackImpl();
             stub.addCallback(callbackObject);
