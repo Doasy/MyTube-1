@@ -23,7 +23,7 @@ public class Client implements ClientInterface{
     private String userName;
     private MyTubeCallbackInterface callbackObject;
 
-    Client(String ip, int port, String userName){
+    private Client(String ip, int port, String userName){
         this.port = port;
         this.ip = ip;
         this.userName = userName;
@@ -53,7 +53,7 @@ public class Client implements ClientInterface{
         return input;
     }
 
-    public void connectToTheServer() throws NotBoundException {
+    private void connectToTheServer() throws NotBoundException {
         try {
             System.setProperty("java.security.policy", "security.policy");
             if (System.getSecurityManager() == null) {
@@ -70,7 +70,7 @@ public class Client implements ClientInterface{
         }
     }
 
-    public void disconnectFromTheServer() {
+    private void disconnectFromTheServer() {
         try {
             stub.removeCallback(callbackObject);
         } catch (Exception ex) {
@@ -238,8 +238,7 @@ public class Client implements ClientInterface{
     }
 
     private boolean isValidID(int fileID) {
-        //TODO: IMPLEMENT
-        return true;
+        return stub.isValidID(fileID);
     }
 
     private int invalidIDTreatment() {
@@ -295,7 +294,7 @@ public class Client implements ClientInterface{
 
     @Override
     public String upload(String contentPath, String description) {
-        String uploadResponse = "";
+        String uploadResponse;
         String title = getTitleFromPath(contentPath);
 
         try{
@@ -346,7 +345,7 @@ public class Client implements ClientInterface{
 
     @Override
     public void modifyContent() throws RemoteException {
-        String modifyResponse = "";
+        String modifyResponse;
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
             printLists(userFiles);

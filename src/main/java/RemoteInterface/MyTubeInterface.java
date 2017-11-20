@@ -31,4 +31,6 @@ public interface MyTubeInterface extends Remote {
     void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException;
 
     void exit() throws RemoteException;
+
+    boolean isValidID(int ID);
 }

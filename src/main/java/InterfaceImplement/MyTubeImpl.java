@@ -51,8 +51,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public boolean isValidID(int ID){
-        //TODO
-        return true;
+        return xmlParser.idExists(String.valueOf(ID));
     }
 
     @Override
