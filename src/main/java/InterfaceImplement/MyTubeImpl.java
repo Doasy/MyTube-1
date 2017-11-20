@@ -22,17 +22,18 @@ import java.util.concurrent.TimeUnit;
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
+    XMLParser xmlParser;
     Set<MyTubeCallbackInterface> callbackObjects;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
         xmlcreator = new XMLCreator();
-        callbackObjects = new HashSet<MyTubeCallbackInterface>();
+        xmlParser = new XMLParser();
+        callbackObjects = new HashSet<>();
     }
 
     @Override
     public String getTitleFromKey(int key) throws RemoteException {
-        XMLParser xmlParser = new XMLParser();
 
         return xmlParser.getNameById(Integer.toString(key));
     }
@@ -42,7 +43,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         String contentName;
         String pathToFile = "./server01/" + Integer.toString(key) + "/";
 
-        XMLParser xmlParser = new XMLParser();
         contentName = xmlParser.getNameById(Integer.toString(key));
         pathToFile = pathToFile + contentName;
 
@@ -50,11 +50,15 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     @Override
+    public boolean isValidID(int ID) throws RemoteException{
+        return xmlParser.idExists(String.valueOf(ID));
+    }
+
+    @Override
     public String getContentFromTitle(String title) throws RemoteException {
         int id;
         String path = "";
         try{
-            XMLParser xmlParser = new XMLParser();
             id = xmlParser.XMLFindIdByTitle(title);
             path = getContentFromKey(id);
         }catch(IOException ex ){
@@ -67,7 +71,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     @Override
     public List<String> searchFromKeyword(String keyword) throws RemoteException {
         List<String> contentFound;
-        XMLParser xmlParser = new XMLParser();
         contentFound =  xmlParser.XMLFindByKeyWord(keyword);
 
         return contentFound;
@@ -76,7 +79,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     @Override
     public List<String> searchAll() throws RemoteException {
         List<String> allContent;
-        XMLParser xmlParser = new XMLParser();
         allContent = xmlParser.XMLShowALL();
 
         return allContent;
@@ -86,7 +88,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     @Override
     public synchronized String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException {
 
-        XMLParser xmlParser = new XMLParser();
         String hash = xmlParser.newID();
         String response = "";
         FileOutputStream output;
@@ -139,7 +140,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public String deleteContent(String id, String userName) throws RemoteException {
-        XMLParser xmlParser = new XMLParser();
         try {
             if(xmlParser.userIsUploader(userName, id)){
                 makeALinuxCall("rm -r ./server01/" + id);
@@ -223,7 +223,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     }
 
     public List<String> showOwnFiles(String userName) throws RemoteException {
-        XMLParser xmlParser = new XMLParser();
         return xmlParser.XMLFindByUserName(userName);
     }
 

@@ -22,7 +22,7 @@ public class Client implements ClientInterface{
     private String userName;
     private MyTubeCallbackInterface callbackObject;
 
-    Client(String ip, int port, String userName){
+    private Client(String ip, int port, String userName){
         this.port = port;
         this.ip = ip;
         this.userName = userName;
@@ -52,7 +52,7 @@ public class Client implements ClientInterface{
         return input;
     }
 
-    public void connectToTheServer() throws NotBoundException {
+    private void connectToTheServer() throws NotBoundException {
         try {
             System.setProperty("java.security.policy", "security.policy");
             if (System.getSecurityManager() == null) {
@@ -69,7 +69,7 @@ public class Client implements ClientInterface{
         }
     }
 
-    public void disconnectFromTheServer() {
+    private void disconnectFromTheServer() {
         try {
             stub.removeCallback(callbackObject);
         } catch (Exception ex) {
@@ -184,7 +184,7 @@ public class Client implements ClientInterface{
         return contents;
     }
 
-    public void download() {
+    public void download() throws RemoteException {
         int contentID = getContentID();
         if (contentID == -1) {
             optionsMenu();
@@ -216,7 +216,7 @@ public class Client implements ClientInterface{
         }
     }
 
-    private int getContentID() {
+    private int getContentID() throws RemoteException{
         System.out.println("Do you know the file ID (Yy/Nn)?  ");
 
         if (isAnswerYes()) {
@@ -226,7 +226,7 @@ public class Client implements ClientInterface{
         return getFileIDFromName();
     }
 
-    private int fileIDTreatment() {
+    private int fileIDTreatment() throws RemoteException {
         System.out.println("Introduce the file ID: ");
         int fileID = Integer.parseInt(readFromInput());
 
@@ -236,12 +236,11 @@ public class Client implements ClientInterface{
         return invalidIDTreatment();
     }
 
-    private boolean isValidID(int fileID) {
-        //TODO: IMPLEMENT
-        return true;
+    private boolean isValidID(int fileID) throws RemoteException {
+        return stub.isValidID(fileID);
     }
 
-    private int invalidIDTreatment() {
+    private int invalidIDTreatment() throws RemoteException {
         System.out.println("Invalid ID. Try again (Yy/Nn)? ");
 
         if (isAnswerYes()) {
@@ -294,7 +293,7 @@ public class Client implements ClientInterface{
 
     @Override
     public String upload(String contentPath, String description) {
-        String uploadResponse = "";
+        String uploadResponse;
         String title = getTitleFromPath(contentPath);
 
         try{
@@ -309,10 +308,13 @@ public class Client implements ClientInterface{
 
             System.out.println(uploadResponse);
 
-        }catch(Exception e){
-            System.out.println("FileImpl " + e.getMessage());
+        }catch(FileNotFoundException e){
+            System.err.println("This file isn't exist in this path, please, try again");
+            uploadResponse = "Something was wrong :S";
+        } catch (RemoteException e) {
             e.printStackTrace();
-
+            uploadResponse = "Something was wrong :S";
+        } catch (IOException e) {
             uploadResponse = "Something was wrong :S";
         }
         return uploadResponse;
@@ -345,7 +347,7 @@ public class Client implements ClientInterface{
 
     @Override
     public void modifyContent() throws RemoteException {
-        String modifyResponse = "";
+        String modifyResponse;
         List<String> userFiles = stub.showOwnFiles(userName);
         if(userFiles.size() > 0){
             printLists(userFiles);
