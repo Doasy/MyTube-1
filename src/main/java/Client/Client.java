@@ -1,9 +1,9 @@
 package Client;
 
-import RemoteInterface.MyTubeCallbackInterface;
-import RemoteInterface.MyTubeInterface;
+import ServerRemoteInterface.MyTubeCallbackInterface;
+import ServerRemoteInterface.MyTubeInterface;
 
-import InterfaceImplement.*;
+import ServerInterfaceImpl.*;
 
 import java.io.*;
 import java.rmi.NotBoundException;

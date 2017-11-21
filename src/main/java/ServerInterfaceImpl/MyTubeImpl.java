@@ -1,7 +1,7 @@
-package InterfaceImplement;
+package ServerInterfaceImpl;
 
-import RemoteInterface.MyTubeCallbackInterface;
-import RemoteInterface.MyTubeInterface;
+import ServerRemoteInterface.MyTubeCallbackInterface;
+import ServerRemoteInterface.MyTubeInterface;
 import Server.Server;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;

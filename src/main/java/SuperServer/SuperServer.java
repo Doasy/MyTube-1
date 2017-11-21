@@ -1,6 +1,6 @@
 package SuperServer;
 
-import RemoteInterface.MyTubeInterface;
+import ServerRemoteInterface.MyTubeInterface;
 import SuperServerInterfaceImpl.SuperServerImpl;
 
 import java.net.UnknownHostException;

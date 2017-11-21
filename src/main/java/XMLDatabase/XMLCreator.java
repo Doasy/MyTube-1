@@ -16,8 +16,6 @@ import java.io.IOException;
 
 public class XMLCreator {
     private String filename = "./server01/Contents.xml";
-    private DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-    private DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     private Document document;
     private Element classElement;
 
@@ -25,6 +23,8 @@ public class XMLCreator {
         File file = new File(filename);
 
         try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             if (file.exists()) {
 
                 this.document = dBuilder.parse(file);

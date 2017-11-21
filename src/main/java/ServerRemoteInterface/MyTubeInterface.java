@@ -1,4 +1,4 @@
-package RemoteInterface;
+package ServerRemoteInterface;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

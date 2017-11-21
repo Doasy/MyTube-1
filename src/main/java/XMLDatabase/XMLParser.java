@@ -5,12 +5,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +12,6 @@ import java.util.List;
 
 public class XMLParser {
     private static final String filename = "server01/Contents.xml";
-    private Document document;
     private Element classElement;
 
     public XMLParser(){
@@ -26,7 +19,7 @@ public class XMLParser {
             File file = new File(filename);
             SAXBuilder saxBuilder = new SAXBuilder();
 
-            this.document = saxBuilder.build(file);
+            Document document = saxBuilder.build(file);
             this.classElement = document.getRootElement();
         }catch (JDOMException | IOException ex){
             ex.printStackTrace();
@@ -51,8 +44,6 @@ public class XMLParser {
     public synchronized String newID(){
         return String.valueOf(Integer.parseInt(getLastId())+1);
     }
-
-
 
     public List<String> XMLFindByKeyWord(String keyWord){
         List<Element> contentList = classElement.getChildren();
@@ -94,6 +85,22 @@ public class XMLParser {
         return listOfTitles;
     }
 
+    public String XMLDownloaDistributedContent(String id, String title, String user){
+        List<Element> contentList = classElement.getChildren();
+
+        for (Element content : contentList) {
+            String uploader = content.getChild("Uploader").getText().toLowerCase();
+            String filename = content.getChild("Title").getText().toLowerCase();
+            String fileId = content.getAttributeValue("id");
+
+            if(user.toLowerCase().contains(uploader) &&
+                    title.toLowerCase().contains(filename) && id.equals(fileId)){
+                return "/" + fileId + "/"+ filename;
+            }
+        }
+        return "";
+    }
+
     public int XMLFindIdByTitle(String title){
         List<Element> contentList = classElement.getChildren();
 
@@ -115,8 +122,6 @@ public class XMLParser {
         }
         return "";
     }
-
-
 
     public boolean idExists(String id){
         String response = getNameById(id);
