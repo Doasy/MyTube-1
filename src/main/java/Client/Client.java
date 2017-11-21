@@ -41,7 +41,8 @@ public class Client implements ClientInterface{
                 "4: Search by keyWord\n" +
                 "5: Delete Content\n" +
                 "6: Modify Content\n" +
-                "7: List Distributed Content");
+                "7: List all the distributed content\n" +
+                "8: Search all the Servers by keyword\n");
     }
 
     private static String readInput() throws IOException {
