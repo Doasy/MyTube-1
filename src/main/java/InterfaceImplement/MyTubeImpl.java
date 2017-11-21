@@ -111,12 +111,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
         } catch (FileNotFoundException e) {
             System.err.println("FileServer Exception " + e.getMessage());
-            response = "there has been a problem with the file :S";
+            response = "There has been a problem with the file :S";
             e.printStackTrace();
 
         } catch (IOException e) {
             System.err.println("FileServer Exception " + e.getMessage());
-            response = "there has been a IO problem :S";
+            response = "There has been a IO problem :S";
             e.printStackTrace();
         }
 
@@ -136,7 +136,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         } catch (Exception e) {
             System.out.println("FileImpl " + e.getMessage());
             e.printStackTrace();
-            return "Problem modifyig content";
+            return "Problem modifying content";
         }
     }
 
@@ -233,8 +233,8 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     @Override
     public void removeCallback(MyTubeCallbackInterface callbackObject) throws RemoteException {
         callbackObjects.remove(callbackObject);
-        System.out.println("A client have been unregistered "
-                + "from callback list. (" + callbackObjects.size() + " clients)");
+        System.out.println("A client have been removed "
+                + "from the callback list. (" + callbackObjects.size() + " clients)");
 
     }
 
@@ -253,7 +253,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             try {
                 callback.notifyNewContent(title);
             } catch (RemoteException ex) {
-                System.err.println("Can not notify new content to all clients");
+                System.err.println("Can't notify new content to all clients");
             }
         }
     }

@@ -271,7 +271,7 @@ public class Client implements ClientInterface{
     }
 
     private int getFileIDFromName() {
-        System.out.println("Introduce the file name: ");
+        System.out.println("Introduce the files name: ");
 
         String fileName = readFromInput();
         search(fileName);
@@ -319,7 +319,7 @@ public class Client implements ClientInterface{
             System.out.println(uploadResponse);
 
         }catch(FileNotFoundException e){
-            System.err.println("This file isn't exist in this path, please, try again");
+            System.err.println("There's no file in this path. Please, try again");
             uploadResponse = "Something was wrong :S";
         } catch (RemoteException e) {
             e.printStackTrace();
