@@ -1,12 +1,11 @@
 package SuperServerInterfaceImpl;
 
 
-import RemoteInterface.MyTubeInterface;
 import SuperServer.SuperServer;
 import SuperServerRemoteInterface.SuperServerRemoteInterface;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SuperServerImpl extends UnicastRemoteObject implements SuperServerRemoteInterface{
@@ -19,4 +18,7 @@ public class SuperServerImpl extends UnicastRemoteObject implements SuperServerR
         return SuperServer.getAllDistributedContent();
     }
 
+    public List<String> searchDistributedFromKeyword(String keyword) throws RemoteException{
+        return SuperServer.searchDistributedFromKeyword(keyword);
+    }
 }

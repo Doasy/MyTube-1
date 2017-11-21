@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SuperServerRemoteInterface extends Remote {
     List<String> getAllDistributedContent() throws RemoteException;
+    List<String> searchDistributedFromKeyword(String keyword) throws RemoteException;
 }

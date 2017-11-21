@@ -161,4 +161,8 @@ public class Server {
     public static List<String> showAllDistributed() throws RemoteException {
         return superServerStub.getAllDistributedContent();
     }
+
+    public static List<String> searchDistributedFromKeyword(String keyword) throws RemoteException{
+        return superServerStub.searchDistributedFromKeyword(keyword);
+    }
 }

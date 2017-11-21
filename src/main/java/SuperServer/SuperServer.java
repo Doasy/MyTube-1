@@ -150,4 +150,13 @@ public class SuperServer {
 
         return allcontent;
     }
+
+    public static List<String> searchDistributedFromKeyword(String keyword) throws RemoteException{
+        List<String> allcontent = new ArrayList<>();
+        for(MyTubeInterface stub:stubs){
+            allcontent.addAll(stub.searchFromKeyword(keyword));
+        }
+
+        return allcontent;
+    }
 }

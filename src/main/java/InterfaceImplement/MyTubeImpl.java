@@ -2,6 +2,7 @@ package InterfaceImplement;
 
 import RemoteInterface.MyTubeCallbackInterface;
 import RemoteInterface.MyTubeInterface;
+import Server.Server;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
 import com.sun.org.apache.regexp.internal.RE;
@@ -239,7 +240,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
     @Override
     public List<String> showAllDistributedContent() throws RemoteException{
-        return Server.Server.showAllDistributed();
+        return Server.showAllDistributed();
+    }
+
+    @Override
+    public List<String> searchDistributedFromKeyword(String keyword) throws RemoteException{
+        return Server.searchDistributedFromKeyword(keyword);
     }
 
     private void notifyAllNewContent(String title) {

@@ -32,5 +32,7 @@ public interface MyTubeInterface extends Remote {
 
     List<String> showAllDistributedContent() throws RemoteException;
 
+    List<String> searchDistributedFromKeyword(String keyword) throws RemoteException;
+
     boolean isValidID(int ID) throws RemoteException;
 }

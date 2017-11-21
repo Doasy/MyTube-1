@@ -81,6 +81,7 @@ public class Client implements ClientInterface{
 
     public static void main(String args[]) {
         int option;
+        String keyword;
         String[] fileInfo;
         try {
             if (args.length < 2) {
@@ -109,7 +110,7 @@ public class Client implements ClientInterface{
                         break;
                     case 4:
                         System.out.println("Enter a keyword to search for content: ");
-                        String keyword = client.readFromInput();
+                        keyword = client.readFromInput();
                         client.search(keyword);
                         break;
                     case 5:
@@ -120,6 +121,11 @@ public class Client implements ClientInterface{
                         break;
                     case 7:
                         client.showAllDistrubutedContent();
+                        break;
+                    case 8:
+                        System.out.println("Enter a keyword to search for content: ");
+                        keyword = client.readFromInput();
+                        client.searchDistributedFromKeyword(keyword);
                         break;
                     default:
                         System.out.println("Incorrect Option.");
@@ -370,9 +376,30 @@ public class Client implements ClientInterface{
         }
     }
 
-    public void showAllDistrubutedContent() throws RemoteException {
-        printLists(stub.showAllDistributedContent());
+    private void showAllDistrubutedContent() throws RemoteException {
+        List<String> ownFiles = stub.searchAll();
+        List<String> distrubutedFiles = stub.showAllDistributedContent();
+        List<String> toShow = new ArrayList<>();
+        for(String files: distrubutedFiles){
+            if(!ownFiles.contains(files)){
+                toShow.add(files);
+            }
+        }
+        printLists(toShow);
     }
+
+    public void searchDistributedFromKeyword(String keyword) throws RemoteException{
+        List<String> ownFiles = stub.searchFromKeyword(keyword);
+        List<String> distrubutedFiles = stub.searchDistributedFromKeyword(keyword);
+        List<String> toShow = new ArrayList<>();
+        for(String files: distrubutedFiles){
+            if(!ownFiles.contains(files)){
+                toShow.add(files);
+            }
+        }
+        printLists(toShow);
+    }
+
     @Override
     public void exit() {
         System.out.print("Disconnecting from the server...");
