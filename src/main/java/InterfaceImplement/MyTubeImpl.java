@@ -91,7 +91,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     public synchronized String uploadContent(String title, String description, byte[] fileData, String userName) throws RemoteException {
 
         String hash = xmlParser.newID();
-        String response = "";
+        String response;
         FileOutputStream output;
         String pathOfFile = "." + File.separator + "server01" + File.separator + hash + File.separator + title;
         System.out.println(title);
@@ -105,7 +105,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             output.write(fileData, 0, fileData.length);
             output.flush();
             output.close();
-            notifyAllNewContent(title);
 
             response = "Successful upload!";
 
@@ -120,6 +119,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             e.printStackTrace();
         }
 
+        notifyAllNewContent(title);
         xmlcreator.addElement(hash, title, description, userName);
 
         return response;
