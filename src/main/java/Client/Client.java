@@ -119,7 +119,7 @@ public class Client implements ClientInterface{
                         client.modifyContent();
                         break;
                     case 7:
-                        client.modifyContent();
+                        client.showAllDistrubutedContent();
                         break;
                     default:
                         System.out.println("Incorrect Option.");
