@@ -37,7 +37,7 @@ public class Client implements ClientInterface{
                 "0: Exit\n"+
                 "1: Upload\n"+
                 "2: Download\n" +
-                "3: List the content available.\n" +
+                "3: List the available content\n" +
                 "4: Search by keyWord\n" +
                 "5: Delete Content\n" +
                 "6: Modify Content\n" +
