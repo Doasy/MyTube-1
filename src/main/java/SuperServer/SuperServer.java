@@ -26,13 +26,13 @@ public class SuperServer {
     private String ip;
     private int port;
 
-    SuperServer(String ip, int port) {
+    private SuperServer(String ip, int port) {
         this.ip = ip;
         this.port = port;
         this.registryURL = "rmi://" + ip + ":" + port + "/" + registryName;
     }
 
-    static public MyTubeInterface connectToTheServer(String ip, int port) throws NotBoundException {
+    static private MyTubeInterface connectToTheServer(String ip, int port) throws NotBoundException {
         MyTubeInterface stub = null;
 
         try {

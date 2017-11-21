@@ -36,9 +36,14 @@ public class XMLParser {
     public List<String> XMLShowALL(){
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();
+        String contentText;
 
         for (Element content : contentList) {
-            listOfTitles.add(content.getChild("Title").getText());
+            contentText = "ID: " + content.getAttributeValue("id") +
+                    " Title: " + content.getChild("Title").getText() +
+                    " Description: " + content.getChild("Description").getText() +
+                    " Uploader: " + content.getChild("Uploader").getText();
+            listOfTitles.add(contentText);
         }
         return listOfTitles;
     }

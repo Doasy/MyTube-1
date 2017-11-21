@@ -12,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Client implements ClientInterface{
     private int port;
@@ -85,13 +86,16 @@ public class Client implements ClientInterface{
         int option;
         String keyword;
         String[] fileInfo;
+        String ip;
+        String port;
         try {
-            if (args.length < 2) {
-                System.err.println("Parameters: <ip> <port>");
-                System.exit(1);
-            }
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("IP of the server to connect");
+            ip = scanner.nextLine();
+            System.out.println("Port of the server to connect");
+            port = scanner.nextLine();
             String userName = registerIntoApp();
-            final Client client = new Client(args[0], Integer.parseInt(args[1]), userName);
+            final Client client = new Client(ip, Integer.parseInt(port), userName);
             client.connectToTheServer();
             while(true) {
                 optionsMenu();
