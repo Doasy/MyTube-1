@@ -1,8 +1,6 @@
 package Server;
 
 import InterfaceImplement.MyTubeImpl;
-import Server_SuperServer_Utilities.Utilities;
-
 
 import SuperServerRemoteInterface.SuperServerRemoteInterface;
 import java.io.IOException;
@@ -127,7 +125,7 @@ public class Server {
                 System.setSecurityManager(new SecurityManager());
             }
             stub = new MyTubeImpl();
-            registry = Utilities.getRegistry(host, port);
+            registry = Utils.Registrator.getRegistry(host, port);
             registry.rebind(registryName, stub);
             System.out.println("MyTube Server ready on: " + registryURL);
         } catch (Exception ex) {

@@ -1,7 +1,6 @@
 package SuperServer;
 
 import RemoteInterface.MyTubeInterface;
-import Server_SuperServer_Utilities.Utilities;
 import SuperServerInterfaceImpl.SuperServerImpl;
 
 import java.net.UnknownHostException;
@@ -117,7 +116,7 @@ public class SuperServer {
                 System.setSecurityManager(new SecurityManager());
             }
             stub = new SuperServerImpl();
-            registry = Utilities.getRegistry(ip, port);
+            registry = Utils.Registrator.getRegistry(ip, port);
             registry.rebind(registryName, stub);
             System.out.println("MyTube Server ready on: " + registryURL);
         } catch (Exception ex) {

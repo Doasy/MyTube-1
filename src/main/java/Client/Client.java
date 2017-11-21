@@ -215,20 +215,14 @@ public class Client implements ClientInterface{
             String title = stub.getTitleFromKey(contentID);
             System.out.println("Downloading in directory "+home + "/Downloads/" + title+"...");
 
-            File file = new File(home + "/Downloads/" + title);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-
-            FileOutputStream output = new FileOutputStream(file);
-
-            output.write(filedata, 0, filedata.length);
-            output.flush();
-            output.close();
+            Utils.FileAssembler.fileAssembler(home, filedata, title);
         }catch(Exception e) {
             System.err.println("FileServer Exception " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+
 
     private int getContentID() throws RemoteException{
         System.out.println("Do you know the file ID (Yy/Nn)?  ");
@@ -311,12 +305,7 @@ public class Client implements ClientInterface{
         String title = getTitleFromPath(contentPath);
 
         try{
-            File file = new File(contentPath);
-            byte buffer[] = new byte[(int)file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
-
-            input.read(buffer, 0, buffer.length);
-            input.close();
+            byte[] buffer = Utils.FileDissasembler.fileDissasembler(contentPath);
 
             uploadResponse = stub.uploadContent(title, description, buffer, userName);
 
@@ -325,14 +314,15 @@ public class Client implements ClientInterface{
         }catch(FileNotFoundException e){
             System.err.println("There's no file in this path. Please, try again");
             uploadResponse = "Something was wrong :S";
-        } catch (RemoteException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             uploadResponse = "Something was wrong :S";
-        } catch (IOException e) {
-            uploadResponse = "Something was wrong :S";
         }
+
         return uploadResponse;
     }
+
+
 
 
     private String getTitleFromPath(String contentPath){
@@ -418,5 +408,4 @@ public class Client implements ClientInterface{
             System.out.println(string);
         }
     }
-
 }

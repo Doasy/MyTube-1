@@ -5,27 +5,22 @@ import RemoteInterface.MyTubeInterface;
 import Server.Server;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
-import com.sun.org.apache.regexp.internal.RE;
-import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
+
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
-    private String systemFile = "./server01";
     private static XMLCreator xmlcreator;
-    XMLParser xmlParser;
-    Set<MyTubeCallbackInterface> callbackObjects;
+    private XMLParser xmlParser;
+    private Set<MyTubeCallbackInterface> callbackObjects;
 
     public MyTubeImpl() throws IOException, SAXException, ParserConfigurationException {
         super();
@@ -92,19 +87,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
         String hash = xmlParser.newID();
         String response;
-        FileOutputStream output;
         String pathOfFile = "." + File.separator + "server01" + File.separator + hash + File.separator + title;
         System.out.println(title);
-        makeALinuxCall("mkdir ./server01/" + hash);
+        Utils.SystemCalls.makeALinuxCall("mkdir ./server01/" + hash);
 
         try {
-            File file = new File(pathOfFile);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            output = new FileOutputStream(file);
-            output.write(fileData, 0, fileData.length);
-            output.flush();
-            output.close();
+            Utils.FileAssembler.fileAssembler(pathOfFile, fileData, title);
 
             response = "Successful upload!";
 
@@ -128,10 +116,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     @Override
     public String modifyContent(String id, String title, String description) throws RemoteException{
         try {
-            String actualTitle = readSystemCallAsString(makeALinuxCall("ls ./server01/" + id));
+            String actualTitle = Utils.SystemCalls.readSystemCallAsString(
+                    Utils.SystemCalls.makeALinuxCall("ls ./server01/" + id));
             String oldTitle = "./server01/" + id + "/" + actualTitle;
             String newTitle = "./server01/" + id + "/" + title;
-            makeALinuxCall("mv " + oldTitle + " " + newTitle);
+            Utils.SystemCalls.makeALinuxCall("mv " + oldTitle + " " + newTitle);
             return xmlcreator.updateElement(id, title, description);
         } catch (Exception e) {
             System.out.println("FileImpl " + e.getMessage());
@@ -144,7 +133,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
     public String deleteContent(String id, String userName) throws RemoteException {
         try {
             if(xmlParser.userIsUploader(userName, id)){
-                makeALinuxCall("rm -r ./server01/" + id);
+                Utils.SystemCalls.makeALinuxCall("rm -r ./server01/" + id);
                 return xmlcreator.deleteElement(id);
             }else{
                 return "Sorry, this file isn't yours.";
@@ -161,14 +150,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         try {
             path = getContentFromKey(id);
 
-            File file = new File(path);
-            byte buffer[] = new byte[(int) file.length()];
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(path));
-
-            input.read(buffer, 0, buffer.length);
-            input.close();
-
-            return (buffer);
+            return Utils.FileDissasembler.fileDissasembler(path);
 
         } catch (Exception e) {
             System.out.println("FileImpl " + e.getMessage());
@@ -178,46 +160,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         }
     }
 
-    private Process makeALinuxCall(String command) {
-        Process p = null;
-        try {
-            p = Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p;
-    }
 
-    private String readSystemCallAsString(Process p) throws IOException {
-        String response = "";
-        String line;
-
-        BufferedReader stdInput = readSystemCall(p);
-        while ((line = stdInput.readLine()) != null) {
-            response += line;
-        }
-        return response;
-    }
-
-    private List<String> readSystemCallAsList(Process p) throws IOException {
-        List<String> response = new ArrayList<>();
-        String line = "";
-        BufferedReader stdInput = readSystemCall(p);
-        while ((line = stdInput.readLine()) != null) {
-            response.add(line);
-        }
-        return response;
-    }
-
-    private BufferedReader readSystemCall(Process p) {
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(p.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(p.getErrorStream()));
-
-        return stdInput;
-    }
 
     public List<String> showOwnFiles(String userName) throws RemoteException {
         return xmlParser.XMLFindByUserName(userName);

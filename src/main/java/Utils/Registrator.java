@@ -1,12 +1,10 @@
-package Server_SuperServer_Utilities;
+package Utils;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-
-public class Utilities {
-
+public class Registrator {
     public static Registry getRegistry(String host, int port) throws RemoteException {
         Registry reg;
         try {
