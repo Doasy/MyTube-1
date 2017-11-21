@@ -64,22 +64,22 @@ public class Server {
     public static void main(String args[]) throws IOException, NotBoundException {
 
         String registryName = "MyTube";
-        if (args.length < 2) {
-            System.err.println("Parameters: <host> <port> "
-                    + "[registryName] [dbName]");
-            System.exit(1);
-        }
 
         Scanner keyboard = new Scanner(System.in);
+
+        System.out.println("Server IP:");
+        String ownIP = keyboard.nextLine();
+        System.out.println("Server Port:");
+        int ownPort = Integer.parseInt(keyboard.nextLine());
+
         System.out.println("SuperServer IP:");
-        String ip = keyboard.nextLine();
+        String superServerIP = keyboard.nextLine();
         System.out.println("SuperServer Port:");
-        int port = Integer.parseInt(keyboard.nextLine());
+        int superServerPort = Integer.parseInt(keyboard.nextLine());
 
-        final Server s = new Server(args[0], Integer.parseInt(args[1]),
-                registryName);
+        final Server s = new Server(ownIP, ownPort, registryName);
 
-        s.connectToTheServer(ip, port);
+        s.connectToTheServer(superServerIP, superServerPort);
 
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {

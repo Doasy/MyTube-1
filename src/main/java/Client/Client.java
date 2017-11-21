@@ -17,7 +17,6 @@ import java.util.Scanner;
 public class Client implements ClientInterface{
     private int port;
     private String ip;
-    private String rmi_url;
     private String rmi_name;
     private MyTubeInterface stub;
     private String userName;
@@ -28,7 +27,6 @@ public class Client implements ClientInterface{
         this.ip = ip;
         this.userName = userName;
         this.rmi_name = "MyTube";
-        rmi_url = "rmi://" + ip + ":" + port + "/" + this.rmi_name;
     }
 
 

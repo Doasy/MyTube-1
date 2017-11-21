@@ -152,5 +152,4 @@ public class XMLParser {
         return content.getAttributeValue("id").equals(id);
     }
 
-
 }
