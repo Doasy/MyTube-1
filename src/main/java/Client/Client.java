@@ -31,7 +31,8 @@ public class Client implements ClientInterface{
     }
 
 
-    private static void optionsMenu(){
+    private static void optionsMenu() throws InterruptedException {
+        Thread.sleep(1000);
         System.out.println("Welcome to MyTube, tell us what you want to do.\n" +
                 "0: Exit\n"+
                 "1: Upload\n"+
@@ -194,7 +195,7 @@ public class Client implements ClientInterface{
         return contents;
     }
 
-    public void download() throws RemoteException {
+    public void download() throws RemoteException, InterruptedException {
         int contentID = getContentID();
         if (contentID == -1) {
             optionsMenu();
