@@ -4,6 +4,7 @@ import RemoteInterface.MyTubeCallbackInterface;
 import RemoteInterface.MyTubeInterface;
 import XMLDatabase.XMLCreator;
 import XMLDatabase.XMLParser;
+import com.sun.org.apache.regexp.internal.RE;
 import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
@@ -234,6 +235,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         System.out.println("A client have been unregistered "
                 + "from callback list. (" + callbackObjects.size() + " clients)");
 
+    }
+
+    @Override
+    public List<String> showAllDistributedContent() throws RemoteException{
+        return Server.Server.showAllDistributed();
     }
 
     private void notifyAllNewContent(String title) {

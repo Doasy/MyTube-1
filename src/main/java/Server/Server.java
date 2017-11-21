@@ -3,15 +3,22 @@ package Server;
 import InterfaceImplement.MyTubeImpl;
 import Server_SuperServer_Utilities.Utilities;
 
+
+import SuperServerRemoteInterface.SuperServerRemoteInterface;
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.net.UnknownHostException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+import java.util.Scanner;
 
 public class Server {
-
+    private static final String rmi_name = "MySuperServer";
     private MyTubeImpl stub;
+    private static SuperServerRemoteInterface superServerStub;
     private Registry registry;
     private final String host;
     private final int port;
@@ -54,7 +61,7 @@ public class Server {
     }
 
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, NotBoundException {
 
         String registryName = "MyTube";
         if (args.length < 2) {
@@ -63,8 +70,16 @@ public class Server {
             System.exit(1);
         }
 
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("SuperServer IP:");
+        String ip = keyboard.nextLine();
+        System.out.println("SuperServer Port:");
+        int port = Integer.parseInt(keyboard.nextLine());
+
         final Server s = new Server(args[0], Integer.parseInt(args[1]),
                 registryName);
+
+        s.connectToTheServer(ip, port);
 
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -120,6 +135,21 @@ public class Server {
         }
     }
 
+    private void connectToTheServer(String ip, int port) throws NotBoundException {
+        try {
+            System.setProperty("java.security.policy", "security.policy");
+            if (System.getSecurityManager() == null) {
+                System.setSecurityManager(new SecurityManager());
+            }
+            Registry registry = LocateRegistry.getRegistry(ip, port);
+            superServerStub = (SuperServerRemoteInterface) registry.lookup(rmi_name);
+            System.out.println("MyTube client connected on: "+  rmi_name);
+        } catch (RemoteException ex) {
+            System.err.println("Can't connect to the server");
+            System.exit(1);
+        }
+    }
+
     private Registry getRegistry(){
         return this.registry;
     }
@@ -128,4 +158,7 @@ public class Server {
         return this.stub;
     }
 
+    public static List<String> showAllDistributed() throws RemoteException {
+        return superServerStub.getAllDistributedContent();
+    }
 }

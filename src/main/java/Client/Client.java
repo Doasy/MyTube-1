@@ -39,7 +39,8 @@ public class Client implements ClientInterface{
                 "3: List the digital available.\n" +
                 "4: Search by keyWord\n" +
                 "5: Delete Content\n" +
-                "6: Modify Content");
+                "6: Modify Content\n" +
+                "7: List Distributed Content");
     }
 
     private static String readInput() throws IOException {
@@ -115,6 +116,9 @@ public class Client implements ClientInterface{
                         client.deleteContent();
                         break;
                     case 6:
+                        client.modifyContent();
+                        break;
+                    case 7:
                         client.modifyContent();
                         break;
                     default:
@@ -366,6 +370,9 @@ public class Client implements ClientInterface{
         }
     }
 
+    public void showAllDistrubutedContent() throws RemoteException {
+        printLists(stub.showAllDistributedContent());
+    }
     @Override
     public void exit() {
         System.out.print("Disconnecting from the server...");
@@ -374,7 +381,6 @@ public class Client implements ClientInterface{
         System.out.println("See you soon ;) ");
         System.exit(0);
     }
-
 
     private void printLists(List<String> listToPrint){
         for(String string: listToPrint){

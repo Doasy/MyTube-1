@@ -13,6 +13,7 @@ import java.rmi.registry.Registry;
 
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SuperServer {
@@ -140,5 +141,14 @@ public class SuperServer {
 
     private SuperServerImpl getStub(){
         return stub;
+    }
+
+    public static List<String> getAllDistributedContent() throws RemoteException{
+        List<String> allcontent = new ArrayList<>();
+        for(MyTubeInterface stub:stubs){
+            allcontent.addAll(stub.searchAll());
+        }
+
+        return allcontent;
     }
 }

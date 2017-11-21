@@ -2,6 +2,7 @@ package SuperServerInterfaceImpl;
 
 
 import RemoteInterface.MyTubeInterface;
+import SuperServer.SuperServer;
 import SuperServerRemoteInterface.SuperServerRemoteInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,13 +15,8 @@ public class SuperServerImpl extends UnicastRemoteObject implements SuperServerR
         super();
     }
 
-    public List<String> getAllDistributedContent(ArrayList<MyTubeInterface> stubs) throws RemoteException{
-        List<String> allcontent = new ArrayList<>();
-        for(MyTubeInterface stub:stubs){
-            allcontent.addAll(stub.searchAll());
-        }
-
-        return allcontent;
+    public List<String> getAllDistributedContent() throws RemoteException{
+        return SuperServer.getAllDistributedContent();
     }
 
 }
