@@ -93,9 +93,9 @@ public class XMLParser {
             String filename = content.getChild("Title").getText().toLowerCase();
             String fileId = content.getAttributeValue("id");
 
-            if(user.toLowerCase().contains(uploader) &&
-                    title.toLowerCase().contains(filename) && id.equals(fileId)){
-                return "/" + fileId + "/"+ filename;
+            if(user.toLowerCase().equals(uploader) &&
+                    title.toLowerCase().equals(filename) && id.equals(fileId)){
+                return "/" + id + "/"+ title;
             }
         }
         return "";

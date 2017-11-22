@@ -171,7 +171,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         callbackObjects.remove(callbackObject);
         System.out.println("A client have been removed "
                 + "from the callback list. (" + callbackObjects.size() + " clients)");
-
     }
 
     @Override
@@ -208,7 +207,6 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         for (MyTubeCallbackInterface callback : callbackObjects) {
 
             callback.notifyNewContent(title);
-
         }
     }
 }

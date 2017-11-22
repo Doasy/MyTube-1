@@ -139,7 +139,6 @@ public class Client implements ClientInterface{
     }
 
     //Distributed Methods
-
     @Override
     public void showAllDistrubutedContent() throws RemoteException {
         List<String> ownFiles = stub.searchAll();
@@ -180,7 +179,6 @@ public class Client implements ClientInterface{
     }
 
     //Others
-
     private void downloadWhitID() throws RemoteException {
         int id = Integer.parseInt(Reader.idReader());
 
