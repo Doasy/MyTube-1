@@ -58,8 +58,8 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         try{
             id = xmlParser.XMLFindIdByTitle(title);
             path = getContentFromKey(id);
-        }catch(IOException ex ){
-            ex.printStackTrace();
+        }catch(IOException e ){
+            Utils.ExceptionMessageThrower.ioExceptionMessage(e);
         }
 
         return path;
@@ -97,14 +97,12 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             response = "Successful upload!";
 
         } catch (FileNotFoundException e) {
-            System.err.println("FileServer Exception " + e.getMessage());
+            Utils.ExceptionMessageThrower.fileNotFoundException(e);
             response = "There has been a problem with the file :S";
-            e.printStackTrace();
 
         } catch (IOException e) {
-            System.err.println("FileServer Exception " + e.getMessage());
+            Utils.ExceptionMessageThrower.ioExceptionMessage(e);
             response = "There has been a IO problem :S";
-            e.printStackTrace();
         }
 
         notifyAllNewContent(title);
@@ -151,16 +149,11 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
             path = getContentFromKey(id);
 
             return Utils.FileDissasembler.fileDissasembler(path);
-
-        } catch (Exception e) {
-            System.out.println("FileImpl " + e.getMessage());
-            e.printStackTrace();
-
-            return (null);
+        } catch (IOException e) {
+            Utils.ExceptionMessageThrower.ioExceptionMessage(e);
         }
+        return null;
     }
-
-
 
     public List<String> showOwnFiles(String userName) throws RemoteException {
         return xmlParser.XMLFindByUserName(userName);
@@ -191,14 +184,31 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
         return Server.searchDistributedFromKeyword(keyword);
     }
 
-    private void notifyAllNewContent(String title) {
-        for (MyTubeCallbackInterface callback : callbackObjects) {
-            try {
-                callback.notifyNewContent(title);
-            } catch (RemoteException ex) {
-                System.err.println("Can't notify new content to all clients");
-            }
-        }
+    public byte[] downloadDistributedContent(String id, String title, String user) throws RemoteException {
+        return Server.downloadDistributedContent(id, title, user);
     }
 
+    @Override
+    public byte[] downloadSpecificContent(String id, String title, String user) throws RemoteException{
+        String path = xmlParser.XMLDownloaDistributedContent(id, title, user);
+        if(!path.equals("")){
+            String completePath = "./server01/" + path;
+            try {
+                return Utils.FileDissasembler.fileDissasembler(completePath);
+
+            } catch (IOException e) {
+                Utils.ExceptionMessageThrower.ioExceptionMessage(e);
+            }
+        }
+
+        return null;
+    }
+
+    private void notifyAllNewContent(String title) throws RemoteException {
+        for (MyTubeCallbackInterface callback : callbackObjects) {
+
+            callback.notifyNewContent(title);
+
+        }
+    }
 }

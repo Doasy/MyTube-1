@@ -11,7 +11,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-import java.util.Scanner;
 
 public class Server {
     private static final String rmi_name = "MySuperServer";
@@ -40,7 +39,7 @@ public class Server {
      * @param port port where the server listens for client petitions
      * @param registryName name of the registered service on RMI Registry
      */
-    public Server(String host, int port, String registryName) throws IOException {
+    private Server(String host, int port, String registryName) throws IOException {
         this.host = host;
         this.port = port;
         this.registryName = registryName;
@@ -63,20 +62,15 @@ public class Server {
 
         String registryName = "MyTube";
 
-        Scanner keyboard = new Scanner(System.in);
+        //Reads Server Info
+        String ownIP = Utils.Reader.ipServerReader();
+        int ownPort = Utils.Reader.portServerReader();
 
-        System.out.println("Server IP:");
-        String ownIP = keyboard.nextLine();
-        System.out.println("Server Port:");
-        int ownPort = Integer.parseInt(keyboard.nextLine());
-
-        System.out.println("SuperServer IP:");
-        String superServerIP = keyboard.nextLine();
-        System.out.println("SuperServer Port:");
-        int superServerPort = Integer.parseInt(keyboard.nextLine());
+        //Reads SuperServer Info
+        String superServerIP = Utils.Reader.ipSuperServerReader();
+        int superServerPort = Utils.Reader.portSuperServerReader();
 
         final Server s = new Server(ownIP, ownPort, registryName);
-
         s.connectToTheServer(superServerIP, superServerPort);
 
         final Thread mainThread = Thread.currentThread();
@@ -162,5 +156,9 @@ public class Server {
 
     public static List<String> searchDistributedFromKeyword(String keyword) throws RemoteException{
         return superServerStub.searchDistributedFromKeyword(keyword);
+    }
+
+    public static byte[] downloadDistributedContent(String id, String name, String user) throws RemoteException{
+        return superServerStub.downloadSpecificContent(id, name, user);
     }
 }

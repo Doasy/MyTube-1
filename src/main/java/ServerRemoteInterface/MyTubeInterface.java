@@ -10,6 +10,10 @@ public interface MyTubeInterface extends Remote {
 
     String getContentFromTitle(String title) throws RemoteException;
 
+    byte[] downloadSpecificContent(String id, String title, String user) throws RemoteException;
+
+    byte[] downloadDistributedContent(String id, String title, String user) throws RemoteException;
+
     String getTitleFromKey(int key) throws RemoteException;
 
     List<String> searchFromKeyword(String keyword) throws RemoteException;

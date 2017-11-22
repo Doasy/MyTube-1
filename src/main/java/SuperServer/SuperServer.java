@@ -12,14 +12,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class SuperServer {
 
     private static final String rmi_server_name = "MyTube";
     private static final String registryName = "MySuperServer";
     private static ArrayList<MyTubeInterface> stubs = new ArrayList<>();
-    private SuperServerImpl stub;
+    private static SuperServerImpl stub;
     private Registry registry;
     private final String registryURL;
     private String ip;
@@ -54,12 +53,12 @@ public class SuperServer {
     }
 
     public static void main(String args[]) throws RemoteException, UnknownHostException {
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("SuperServer IP:");
-        String ip = keyboard.nextLine();
-        System.out.println("SuperServer Port:");
-        int port = Integer.parseInt(keyboard.nextLine());
-        SuperServer superServer = new SuperServer(ip, port);
+
+        //Reads SuperServer Info
+        String superServerIP = Utils.Reader.ipSuperServerReader();
+        int superServerPort = Utils.Reader.portSuperServerReader();
+
+        SuperServer superServer = new SuperServer(superServerIP, superServerPort);
 
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -83,10 +82,9 @@ public class SuperServer {
         threadLauncher();
 
         while (true) {
-            System.out.println("Server IP:");
-            String serverIP = keyboard.nextLine();
-            System.out.println("Server Port:");
-            int serverPort = Integer.parseInt(keyboard.nextLine());
+
+            String serverIP = Utils.Reader.ipServerReader();
+            int serverPort = Utils.Reader.portServerReader();
             try {
                 stubs.add(connectToTheServer(serverIP, serverPort));
             } catch (NotBoundException e) {
@@ -95,7 +93,7 @@ public class SuperServer {
         }
     }
 
-    public static void stopServer(Registry registry, String registryName, SuperServerImpl stub) throws RemoteException {
+    private static void stopServer(Registry registry, String registryName, SuperServerImpl stub) throws RemoteException {
         try{
             registry.unbind(registryName);
             UnicastRemoteObject.unexportObject(stub, true);
@@ -108,7 +106,7 @@ public class SuperServer {
     /**
      * Runs the Server
      */
-    public void runServer() {
+    private void runServer() {
         try {
             System.setProperty("java.rmi.server.hostname", ip);
             System.setProperty("java.security.policy", "security.policy");
@@ -126,7 +124,7 @@ public class SuperServer {
 
     /***
      * In charge of starting the thread.
-     * @throws UnknownHostException
+     * @throws UnknownHostException unknown host exception
      */
     private static void threadLauncher() throws UnknownHostException {
         Thread theThread = new Thread();
@@ -157,5 +155,16 @@ public class SuperServer {
         }
 
         return allcontent;
+    }
+
+    public static byte[] downloadDistributedContent(String id, String title, String user) throws RemoteException {
+        byte[] content;
+        for(MyTubeInterface stub:stubs){
+            content = stub.downloadSpecificContent(id, title, user);
+            if(content != null){
+                return  content;
+            }
+        }
+        return null;
     }
 }
