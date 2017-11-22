@@ -1,0 +1,12 @@
+title Upload Method
+Client -> Naming: Request Remote Object
+Naming -> Register: Request Remote Object
+Register -> Naming: Returns ServerStub
+Naming -> Client: Returns Server Stub
+Client -> Client: Get Information about object to upload
+Client -> Stub: uploadContent(title, description, file, user)
+Stub -> MyTubeImpl: uploadContent(title, description, file, user)
+MyTubeImpl -> XMLParser: addElement(id, title, description, username)
+XMLParser -> XMLParser: write element into xml
+MyTubeImpl -> Stub: Content Uploaded Message
+Stub -> Client: Content Uploaded Message

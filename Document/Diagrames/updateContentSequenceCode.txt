@@ -1,0 +1,24 @@
+title Update Method
+Client -> Naming: Request Remote Object
+Naming -> Register: Request Remote Object
+Register -> Naming: Returns ServerStub
+Naming -> Client: Returns Server Stub
+
+
+Client -> Stub: showOwnFiles(user)
+Stub -> MyTubeImpl: showOwnFiles(user)
+MyTubeImpl -> XMLParser: showOwnFiles(user)
+XMLParser -> MyTubeImpl: All the files uploaded for the user.
+MyTubeImpl -> Stub:  All the files uploaded for the user.
+Stub -> Client:  All the files uploaded for the user.
+
+Client -> Client: Get id of the content that we want to modify.
+Client -> Client: Get new title and new description.
+Client -> Stub: modifyContent(id, title, descritpion)
+Stub -> MyTubeImpl: modifyContent(id, title, descritpion)
+MyTubeImpl -> XMLParser: updateElement(id, title, description)
+XMLParser -> MyTubeImpl: Element Modified Correctly Message.
+MyTubeImpl -> Stub: Element Modified Correctly Message.
+Stub -> Client: Element Modified Correctly Message.
+
+

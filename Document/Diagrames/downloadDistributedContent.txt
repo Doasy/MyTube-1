@@ -1,0 +1,27 @@
+title Download Distributed Content
+Client -> Naming: Request Remote Object
+Naming -> Register: Request Remote Object
+Register -> Naming: Returns ServerStub
+Naming -> Client: Returns Server Stub
+
+
+Client -> StubMyTubeImpl: downloadDistributedContent(id, title, uploader)
+StubMyTubeImpl -> MyTubeImpl: downloadDistributedContent(id, title, uploader)
+MyTubeImpl -> Server: downloadDistributedContent(id, title, uploader)
+Server -> StubSuperServerImpl: downloadDistributedContent(id, title, uploader)
+StubSuperServerImpl -> SuperServerImpl:  downloadDistributedContent(id, title, uploader)
+SuperServerImpl -> SuperServer:  downloadDistributedContent(id, title, uploader)
+
+loop for each Server registered in SuperServer
+   SuperServer -> StubMyTubeImpl:downloadSpecificContent(id, title, uploader)
+   StubMyTubeImpl -> MyTubeImpl : downloadSpecificContent(id, title, uploader)
+   MyTubeImpl -> StubMyTubeImpl : Returns local content.
+   StubMyTubeImpl -> SuperServer : Returns local content.
+end
+
+SuperServer -> SuperServerImpl: Returns the content.
+SuperServerImpl -> StubSuperServerImpl: Returns the content.
+StubSuperServerImpl -> Server: Returns the content.
+Server -> MyTubeImpl: Returns the  content.
+MyTubeImpl -> StubMyTubeImpl: Returns the content.
+StubMyTubeImpl -> Client: Returns the  content that.

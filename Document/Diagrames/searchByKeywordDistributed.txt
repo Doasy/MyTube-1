@@ -1,0 +1,28 @@
+title Search Distributed Content by KeyWord
+Client -> Naming: Request Remote Object
+Naming -> Register: Request Remote Object
+Register -> Naming: Returns ServerStub
+Naming -> Client: Returns Server Stub
+
+
+Client -> StubMyTubeImpl: SearchDistributedFromKeyword(keyword)
+StubMyTubeImpl -> MyTubeImpl: SearchDistributedFromKeyword(keyword)
+MyTubeImpl -> Server: SearchDistributedFromKeyword(keyword)
+Server -> StubSuperServerImpl: SearchDistributedFromKeyword(keyword)
+StubSuperServerImpl -> SuperServerImpl:  SearchDistributedFromKeyword(keyword)
+SuperServerImpl -> SuperServer:  SearchDistributedFromKeyword(keyword)
+
+loop for each Server registered in SuperServer
+   SuperServer -> StubMyTubeImpl: searchFromKeyword(keyword)
+   StubMyTubeImpl -> MyTubeImpl : searchFromKeyword(keyword)
+   MyTubeImpl -> StubMyTubeImpl : Returns local content.
+   StubMyTubeImpl -> SuperServer : Returns local content.
+end
+
+SuperServer -> SuperServerImpl: Returns the distributed content that contains the keyword
+SuperServerImpl -> StubSuperServerImpl: Returns the distributed content that contains the keyword
+StubSuperServerImpl -> Server: Returns the distributed content that contains the keyword
+Server -> MyTubeImpl: Returns the distributed content that contains the keyword
+MyTubeImpl -> StubMyTubeImpl: Returns the distributed content that contains the keyword
+StubMyTubeImpl -> Client: Returns the distributed content that contains the keyword
+
