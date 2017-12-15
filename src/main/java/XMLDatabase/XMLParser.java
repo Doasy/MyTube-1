@@ -26,7 +26,20 @@ public class XMLParser {
         }
     }
 
+    public void initFile(){
+        try {
+            File file = new File(filename);
+            SAXBuilder saxBuilder = new SAXBuilder();
+
+            Document document = saxBuilder.build(file);
+            this.classElement = document.getRootElement();
+        }catch (JDOMException | IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
     public List<String> XMLShowALL(){
+        initFile();
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();
         String contentText;
@@ -46,6 +59,7 @@ public class XMLParser {
     }
 
     public List<String> XMLFindByKeyWord(String keyWord){
+        initFile();
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();
         String contentText;
@@ -67,6 +81,7 @@ public class XMLParser {
     }
 
     public List<String> XMLFindByUserName(String userName){
+        initFile();
         List<Element> contentList = classElement.getChildren();
         List<String> listOfTitles = new ArrayList<>();
         String contentText;
@@ -87,6 +102,7 @@ public class XMLParser {
 
     public String XMLDownloaDistributedContent(String id, String title, String user){
         List<Element> contentList = classElement.getChildren();
+        initFile();
 
         for (Element content : contentList) {
             String uploader = content.getChild("Uploader").getText().toLowerCase();
@@ -103,6 +119,7 @@ public class XMLParser {
 
     public int XMLFindIdByTitle(String title){
         List<Element> contentList = classElement.getChildren();
+        initFile();
 
         for (Element content : contentList) {
             if(title.toLowerCase().equals(content.getChild("Title").getText().toLowerCase())){
@@ -114,6 +131,7 @@ public class XMLParser {
 
     public String getNameById(String id){
         List<Element> contentList  = classElement.getChildren();
+        initFile();
 
         for (Element content : contentList){
             if(isId(id, content)){
@@ -124,12 +142,14 @@ public class XMLParser {
     }
 
     public boolean idExists(String id){
+        initFile();
         String response = getNameById(id);
         return !response.equals("");
     }
 
     private String getLastId(){
         List<Element> contentList = classElement.getChildren();
+        initFile();
 
         if(contentList.isEmpty()){
             return "0";
@@ -140,7 +160,7 @@ public class XMLParser {
 
     public boolean userIsUploader(String user, String id){
         List<Element> contentList = classElement.getChildren();
-
+        initFile();
         for (Element content : contentList) {
             if(isId(id, content) && isUploader(user, content)){
                 return true;
@@ -150,10 +170,12 @@ public class XMLParser {
     }
 
     private boolean isUploader(String user, Element content) {
+        initFile();
         return content.getChild("Uploader").getText().equals(user);
     }
 
     private boolean isId(String id, Element content) {
+        initFile();
         return content.getAttributeValue("id").equals(id);
     }
 

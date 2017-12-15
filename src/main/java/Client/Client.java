@@ -167,7 +167,7 @@ public class Client implements ClientInterface{
 
     @Override
     public void downloadDistributedContent(String id, String title, String user) throws RemoteException {
-        String home = System.getProperty("user.home");
+        String home = System.getProperty("user.home") + "/Downloads/";
         try {
             byte[] filedata = stub.downloadDistributedContent(id, title, user);
             System.out.println("Downloading in directory " + home + "/Downloads/" + title);
@@ -197,11 +197,11 @@ public class Client implements ClientInterface{
     }
 
     private void downloadContent(int contentID) throws RemoteException{
-        String home = System.getProperty("user.home");
+        String home = System.getProperty("user.home") + "/Downloads/";
         try {
             byte[] filedata = stub.downloadContent(contentID);
             String title = stub.getTitleFromKey(contentID);
-            System.out.println("Downloading in directory "+home + "/Downloads/" + title+"...");
+            System.out.println("Downloading in directory " + home + "/Downloads/" + title+"...");
 
             FileAssembler.fileAssembler(home, filedata, title);
         }catch(IOException e) {

@@ -7,7 +7,7 @@ import java.io.IOException;
 public class FileAssembler {
 
     public static void fileAssembler(String home, byte[] filedata, String title) throws IOException {
-        File file = new File(home + "/Downloads/" + title);
+        File file = new File(home + title);
         file.getParentFile().mkdirs();
         file.createNewFile();
 

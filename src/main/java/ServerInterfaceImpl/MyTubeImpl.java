@@ -87,7 +87,7 @@ public class MyTubeImpl extends UnicastRemoteObject implements MyTubeInterface {
 
         String hash = xmlParser.newID();
         String response;
-        String pathOfFile = "." + File.separator + "server01" + File.separator + hash + File.separator + title;
+        String pathOfFile = "./server01/" + hash + "/";
         System.out.println(title);
         Utils.SystemCalls.makeALinuxCall("mkdir ./server01/" + hash);
 
