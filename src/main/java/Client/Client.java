@@ -259,47 +259,51 @@ public class Client implements ClientInterface{
         String keyword;
         while(true) {
             Printer.optionsMenu();
-            option = Integer.parseInt(Reader.optionReader());
-            switch (option) {
-                case 0:
-                    client.exit();
-                    break;
-                case 1:
-                    String path = Reader.pathReader();
-                    String description = Reader.descriptionReader();
-                    client.upload(path, description);
-                    break;
-                case 2:
-                    client.download();
-                    break;
-                case 3:
-                    client.listAll();
-                    break;
-                case 4:
-                    keyword = Reader.keywordReader();
-                    client.search(keyword);
-                    break;
-                case 5:
-                    client.deleteContent();
-                    break;
-                case 6:
-                    client.modifyContent();
-                    break;
-                case 7:
-                    client.showAllDistrubutedContent();
-                    break;
-                case 8:
-                    keyword = Reader.keywordReader();
-                    client.searchDistributedFromKeyword(keyword);
-                    break;
-                case 9:
-                    String id = Reader.idReader();
-                    String title = Reader.titleReader();
-                    String uploader = Reader.uploaderReader();
-                    client.downloadDistributedContent(id, title, uploader);
-                    break;
-                default:
-                    System.out.println("Incorrect Option.");
+            try {
+                option = Integer.parseInt(Reader.optionReader());
+                switch (option) {
+                    case 0:
+                        client.exit();
+                        break;
+                    case 1:
+                        String path = Reader.pathReader();
+                        String description = Reader.descriptionReader();
+                        client.upload(path, description);
+                        break;
+                    case 2:
+                        client.download();
+                        break;
+                    case 3:
+                        client.listAll();
+                        break;
+                    case 4:
+                        keyword = Reader.keywordReader();
+                        client.search(keyword);
+                        break;
+                    case 5:
+                        client.deleteContent();
+                        break;
+                    case 6:
+                        client.modifyContent();
+                        break;
+                    case 7:
+                        client.showAllDistrubutedContent();
+                        break;
+                    case 8:
+                        keyword = Reader.keywordReader();
+                        client.searchDistributedFromKeyword(keyword);
+                        break;
+                    case 9:
+                        String id = Reader.idReader();
+                        String title = Reader.titleReader();
+                        String uploader = Reader.uploaderReader();
+                        client.downloadDistributedContent(id, title, uploader);
+                        break;
+                    default:
+                        System.out.println("Incorrect Option.");
+                }
+            }catch (NumberFormatException exception){
+                System.out.println("Write one of the correct options (Number)");
             }
         }
     }
