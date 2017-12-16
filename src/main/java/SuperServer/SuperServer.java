@@ -3,6 +3,7 @@ package SuperServer;
 import ServerRemoteInterface.MyTubeInterface;
 import SuperServerInterfaceImpl.SuperServerImpl;
 
+import java.util.concurrent.TimeUnit;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -145,6 +146,12 @@ public class SuperServer {
             allcontent.addAll(stub.searchAll());
         }
 
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return allcontent;
     }
 
@@ -152,6 +159,7 @@ public class SuperServer {
         List<String> allcontent = new ArrayList<>();
         for(MyTubeInterface stub:stubs){
             allcontent.addAll(stub.searchFromKeyword(keyword));
+
         }
 
         return allcontent;

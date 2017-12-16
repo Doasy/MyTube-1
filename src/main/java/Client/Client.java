@@ -145,9 +145,7 @@ public class Client implements ClientInterface{
         List<String> distrubutedFiles = stub.showAllDistributedContent();
         List<String> toShow = new ArrayList<>();
         for(String files: distrubutedFiles){
-            if(!ownFiles.contains(files)){
                 toShow.add(files);
-            }
         }
         Printer.printLists(toShow);
     }
@@ -158,9 +156,7 @@ public class Client implements ClientInterface{
         List<String> distrubutedFiles = stub.searchDistributedFromKeyword(keyword);
         List<String> toShow = new ArrayList<>();
         for(String files: distrubutedFiles){
-            if(!ownFiles.contains(files)){
                 toShow.add(files);
-            }
         }
         Printer.printLists(toShow);
     }
